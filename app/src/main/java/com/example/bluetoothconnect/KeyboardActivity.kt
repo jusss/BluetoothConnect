@@ -128,9 +128,12 @@ class KeyboardActivity : AppCompatActivity() {
 
             if (event!!.isShiftPressed()){
                 val pressedTime = System.currentTimeMillis()
-                if ((pressedTime - latestSentTime) > 160L) {
+                if ((pressedTime - latestSentTime) > 160L && (keyCode != 59)) {
+                    // shift is 59, press shift ? will send shift then shift ?, so block single shift
                     // shift space, it will send twice key event, reduce one
                     sendModifierKey(keyCode,"Shift")
+//                    keyboardReportSendKey(keyCode,"Shift")
+//                    println("keycode is $keyCode, with Shift ")
                     latestSentTime = pressedTime
                 }
                 return@setOnKeyListener true
@@ -138,10 +141,11 @@ class KeyboardActivity : AppCompatActivity() {
 
             if (event!!.isCtrlPressed()){
                 val pressedTime = System.currentTimeMillis()
-                if ((pressedTime - latestSentTime) > 160L) {
+                if ((pressedTime - latestSentTime) > 160L   &&   (keyCode != 113)) {
                     // shift space, it will send twice key event, reduce one
 
                     keyboardReportSendKey(keyCode,"Ctrl")
+//                    println("keycode is $keyCode, with Ctrl ")
                     latestSentTime = pressedTime
                 }
                 return@setOnKeyListener true
@@ -149,19 +153,22 @@ class KeyboardActivity : AppCompatActivity() {
 
             if (event!!.isAltPressed()){
                 val pressedTime = System.currentTimeMillis()
-                if ((pressedTime - latestSentTime) > 160L) {
+                if ((pressedTime - latestSentTime) > 160L   &&   (keyCode != 57)) {
                     // shift space, it will send twice key event, reduce one
                     keyboardReportSendKey(keyCode,"Alt")
+//                    println("keycode is $keyCode, with Alt ")
                     latestSentTime = pressedTime
                 }
                 return@setOnKeyListener true
             }
 
-            if (event!!.isSymPressed()){
+            // windows key is search key in android
+            if (event!!.isMetaPressed()){
                 val pressedTime = System.currentTimeMillis()
                 if ((pressedTime - latestSentTime) > 160L) {
                     // shift space, it will send twice key event, reduce one
                     keyboardReportSendKey(keyCode,"Window")
+                    println("keycode is $keyCode, with Window ")
                     latestSentTime = pressedTime
                 }
                 return@setOnKeyListener true
@@ -170,6 +177,7 @@ class KeyboardActivity : AppCompatActivity() {
             if (event?.action == KeyEvent.ACTION_DOWN) {
                if (bthid.connectedDevices != null){
                    sendKey(keyCode)
+//                   println("--- keycode is $keyCode")
                }
                 else {
                    btAdapter.getProfileProxy(this,
