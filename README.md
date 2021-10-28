@@ -1,4 +1,3 @@
-# BluetoothConnect
 Use Android as A Bluetooth Keyboard, support OTG Keyboard too
 
 # How to Use
@@ -8,3 +7,10 @@ Use Android as A Bluetooth Keyboard, support OTG Keyboard too
 4. if it's Windows, it will pop pair-dialog up, pair it, no need for iPhone
 5. OTG connect this Android with wired keyboard, choose aosp English keyboard as input method on Android
 6. no need to repeat above steps for reopen this app, but if the PC's changed, it needs to repeat it again, no need for iPhone
+
+# Reference
+https://github.com/ginkage/wearmouse<br/>
+https://github.com/domi1294/BluetoothHidDemo <br/>
+https://github.com/AchimStuy/Kontroller <br/>
+https://www.usb.org/sites/default/files/documents/hut1_12v2.pdf<br/>
+https://elementalx.org/button-mapper/android-key-codes/ <br/>
