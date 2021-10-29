@@ -16,6 +16,11 @@ class KeyboardActivity : AppCompatActivity() {
     val keyboardReport2 = KeyboardReport2()
     lateinit var btAdapter: BluetoothAdapter
     lateinit var TARGET_DEVICE_NAME: String
+    var isCapsLockPressed = false
+    var isAltPressed = false
+    var isCtrlPressed = false
+    var isShiftPressed = false
+    var isShiftPressedWithOthers = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -126,58 +131,106 @@ class KeyboardActivity : AppCompatActivity() {
 
         editTextView?.setOnKeyListener { v: View?, keyCode: Int, event: KeyEvent? ->
 
-            if (event!!.isShiftPressed()){
-                val pressedTime = System.currentTimeMillis()
-                if ((pressedTime - latestSentTime) > 160L && (keyCode != 59)) {
-                    // shift is 59, press shift ? will send shift then shift ?, so block single shift
-                    // shift space, it will send twice key event, reduce one
-                    sendModifierKey(keyCode,"Shift")
-//                    keyboardReportSendKey(keyCode,"Shift")
-//                    println("keycode is $keyCode, with Shift ")
-                    latestSentTime = pressedTime
-                }
-                return@setOnKeyListener true
-            }
+//            if (event!!.isLongPress   &&   keyCode == KeyEvent.KEYCODE_CAPS_LOCK) isCapsLockPressed = true
+//            else isCapsLockPressed = false
 
-            if (event!!.isCtrlPressed()){
-                val pressedTime = System.currentTimeMillis()
-                if ((pressedTime - latestSentTime) > 160L   &&   (keyCode != 113)) {
-                    // shift space, it will send twice key event, reduce one
+//            if (event!!.isCapsLockOn) {
+//                keyboardReportSendKey(keyCode,"Ctrl")
+//                println("--- capslock is on and send as ctrl")
+//                println("--- keycode is $keyCode")
+//            }
 
-                    keyboardReportSendKey(keyCode,"Ctrl")
-//                    println("keycode is $keyCode, with Ctrl ")
-                    latestSentTime = pressedTime
-                }
-                return@setOnKeyListener true
-            }
+//            if (event!!.isShiftPressed()){
+//                val pressedTime = System.currentTimeMillis()
+//                if ((pressedTime - latestSentTime) > 160L && (keyCode != 59)) {
+//                    // shift is 59, press shift ? will send shift then shift ?, so block single shift
+//                    // shift space, it will send twice key event, reduce one
+//                    sendModifierKey(keyCode,"Shift")
+////                    keyboardReportSendKey(keyCode,"Shift")
+////                    println("keycode is $keyCode, with Shift ")
+//                    latestSentTime = pressedTime
+//                }
+//                return@setOnKeyListener true
+//            }
 
-            if (event!!.isAltPressed()){
-                val pressedTime = System.currentTimeMillis()
-                if ((pressedTime - latestSentTime) > 160L   &&   (keyCode != 57)) {
-                    // shift space, it will send twice key event, reduce one
-                    keyboardReportSendKey(keyCode,"Alt")
-//                    println("keycode is $keyCode, with Alt ")
-                    latestSentTime = pressedTime
-                }
-                return@setOnKeyListener true
-            }
+//            if (event!!.isCtrlPressed()){
+//                val pressedTime = System.currentTimeMillis()
+//                if ((pressedTime - latestSentTime) > 160L   &&   (keyCode != 113)) {
+//                    // shift space, it will send twice key event, reduce one
+//
+//                    keyboardReportSendKey(keyCode,"Ctrl")
+////                    println("keycode is $keyCode, with Ctrl ")
+//                    latestSentTime = pressedTime
+//                }
+//                return@setOnKeyListener true
+//            }
 
-            // windows key is search key in android
-            if (event!!.isMetaPressed()){
-                val pressedTime = System.currentTimeMillis()
-                if ((pressedTime - latestSentTime) > 160L) {
-                    // shift space, it will send twice key event, reduce one
-                    keyboardReportSendKey(keyCode,"Window")
-                    println("keycode is $keyCode, with Window ")
-                    latestSentTime = pressedTime
+//            if (event!!.isAltPressed()){
+//                val pressedTime = System.currentTimeMillis()
+//                if ((pressedTime - latestSentTime) > 160L   &&   (keyCode != 57)) {
+//                    // shift space, it will send twice key event, reduce one
+//                    keyboardReportSendKey(keyCode,"Alt")
+////                    println("keycode is $keyCode, with Alt ")
+//                    latestSentTime = pressedTime
+//                }
+//                return@setOnKeyListener true
+//            }
+
+            // windows key is search key in android, but there is no keycode for window key or fn key by otg wired keyboard input
+//            if (event!!.isMetaPressed()){
+//                val pressedTime = System.currentTimeMillis()
+//                if ((pressedTime - latestSentTime) > 160L) {
+//                    // shift space, it will send twice key event, reduce one
+//                    keyboardReportSendKey(keyCode,"Window")
+//                    println("keycode is $keyCode, with Window ")
+//                    latestSentTime = pressedTime
+//                }
+//                return@setOnKeyListener true
+//            }
+
+            if (event?.action == KeyEvent.ACTION_UP) {
+                if (keyCode == KeyEvent.KEYCODE_CAPS_LOCK) { isCapsLockPressed = false }
+                if (keyCode == KeyEvent.KEYCODE_ALT_LEFT || keyCode == KeyEvent.KEYCODE_ALT_RIGHT) { isAltPressed = false }
+                if (keyCode == KeyEvent.KEYCODE_CTRL_LEFT || keyCode == KeyEvent.KEYCODE_CTRL_RIGHT) { isCtrlPressed = false }
+                if (keyCode == KeyEvent.KEYCODE_SHIFT_LEFT || keyCode == KeyEvent.KEYCODE_SHIFT_RIGHT) {
+                   if (!isShiftPressedWithOthers) {keyboardReportSendKey(0, "Shift")}
+                    isShiftPressed = false
                 }
-                return@setOnKeyListener true
             }
 
             if (event?.action == KeyEvent.ACTION_DOWN) {
                if (bthid.connectedDevices != null){
-                   sendKey(keyCode)
 //                   println("--- keycode is $keyCode")
+                   if (keyCode == KeyEvent.KEYCODE_CAPS_LOCK) {
+                       isCapsLockPressed = true
+                   }
+                   if (keyCode == KeyEvent.KEYCODE_ALT_LEFT || keyCode == KeyEvent.KEYCODE_ALT_RIGHT) {
+                       isAltPressed = true
+                   }
+                   if (keyCode == KeyEvent.KEYCODE_CTRL_LEFT || keyCode == KeyEvent.KEYCODE_CTRL_RIGHT){
+                       isCtrlPressed = true
+                   }
+                   if (keyCode == KeyEvent.KEYCODE_SHIFT_LEFT || keyCode == KeyEvent.KEYCODE_SHIFT_RIGHT){
+                       isShiftPressed = true ;
+                       isShiftPressedWithOthers = false
+                   }
+
+                   if (isCapsLockPressed) {
+                       if (keyCode != KeyEvent.KEYCODE_CAPS_LOCK) keyboardReportSendKey(keyCode,"Ctrl")
+                   }
+                   else if (isAltPressed) {
+                       if (keyCode != KeyEvent.KEYCODE_ALT_LEFT   &&   keyCode != KeyEvent.KEYCODE_ALT_RIGHT) keyboardReportSendKey(keyCode,"Alt")
+                   }
+                   else if (isCtrlPressed) {
+                      if (keyCode != KeyEvent.KEYCODE_CTRL_LEFT   &&   keyCode != KeyEvent.KEYCODE_CTRL_RIGHT) keyboardReportSendKey(keyCode,"Ctrl")
+                   }
+                   else if (isShiftPressed) {
+                       if (keyCode != KeyEvent.KEYCODE_SHIFT_LEFT   &&   keyCode != KeyEvent.KEYCODE_SHIFT_RIGHT){
+                           keyboardReportSendKey(keyCode, "Shift")
+                           isShiftPressedWithOthers = true
+                       }
+                   }
+                   else sendKey(keyCode)
                }
                 else {
                    btAdapter.getProfileProxy(this,
