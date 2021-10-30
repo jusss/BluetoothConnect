@@ -62,71 +62,119 @@ class KeyboardActivity : AppCompatActivity() {
                 }
                 , BluetoothProfile.HID_DEVICE)
 
-        fun sendKeyUp(){
+        fun sendKeyUp2(){
             keyboardReport2.bytes.fill(0)
             if (!bthid.sendReport(ConnectedDevice.device, KeyboardReport2.ID, keyboardReport2.bytes)) {
                 Log.e(" ", "Report wasn't sent")
             }
         }
 
-        fun sendKey(keyCode: Int){
-            var key = 0
-            if (keyCode2KeyCode.regularPhysicsKey.containsKey(keyCode)){
-                key = keyCode2KeyCode.keyMap.getOrDefault(keyCode2KeyCode.regularPhysicsKey.getOrDefault(keyCode,','),0)
-            }
-            if (keyCode2KeyCode.specialPhysicsKey.containsKey(keyCode)){
-                key = keyCode2KeyCode.scancode.getOrDefault(keyCode2KeyCode.specialPhysicsKey.getOrDefault(keyCode,"Space"),0)
-            }
-            keyboardReport2.key1=key.toByte()
-            bthid.sendReport(
-                ConnectedDevice.device,KeyboardReport2.ID,keyboardReport2.bytes
-            )
+//        fun sendKey(keyCode: Int){
+//            var key = 0
+//            if (keyCode2KeyCode.regularPhysicsKey.containsKey(keyCode)){
+//                key = keyCode2KeyCode.keyMap.getOrDefault(keyCode2KeyCode.regularPhysicsKey.getOrDefault(keyCode,','),0)
+//            }
+//            if (keyCode2KeyCode.specialPhysicsKey.containsKey(keyCode)){
+//                key = keyCode2KeyCode.scancode.getOrDefault(keyCode2KeyCode.specialPhysicsKey.getOrDefault(keyCode,"Space"),0)
+//            }
+//            keyboardReport2.key1=key.toByte()
+//            bthid.sendReport(
+//                ConnectedDevice.device,KeyboardReport2.ID,keyboardReport2.bytes
+//            )
+//
+//            sendKeyUp()
+//        }
 
-            sendKeyUp()
+        fun sendKey2(keyCode: Int){
+            val key = KeyboardReport2.KeyEventMap.get(keyCode)
+//            if (key != null){
+//                val data = keyboardReport.setValue(0,key,0,0,0,0,0)
+//                bthid.sendReport(
+//                        ConnectedDevice.device,KeyboardReport2.ID,data
+//                )
+//                sendKeyUp()
+//            }
+
+            if (key != null){
+                keyboardReport2.key1=key.toByte()
+                bthid.sendReport(
+                        ConnectedDevice.device,KeyboardReport2.ID,keyboardReport2.bytes
+                )
+                sendKeyUp2()
+            }
         }
 
-        fun sendModifierKey(keyCode:Int, modifierKey: String){
+        fun keyboardReportSendKey2(keyCode:Int, modifierKey: String){
             if (modifierKey == "Shift") keyboardReport2.leftShift = true
             if (modifierKey == "Ctrl") keyboardReport2.leftControl = true
             if (modifierKey == "Alt") keyboardReport2.leftAlt = true
             if (modifierKey == "Window") keyboardReport2.leftGui = true
             var key = 0
-            if (keyCode2KeyCode.regularPhysicsKey.containsKey(keyCode)){
-                key = keyCode2KeyCode.keyMap.getOrDefault(keyCode2KeyCode.regularPhysicsKey.getOrDefault(keyCode,','),0)
-            }
-            if (keyCode2KeyCode.specialPhysicsKey.containsKey(keyCode)){
-                key = keyCode2KeyCode.scancode.getOrDefault(keyCode2KeyCode.specialPhysicsKey.getOrDefault(keyCode,"Space"),0)
-            }
+            // if keyCode is 0, then key will be 0
+            key = KeyboardReport2.KeyEventMap.get(keyCode) ?: 0
             keyboardReport2.key1=key.toByte()
             bthid.sendReport(
-                ConnectedDevice.device,KeyboardReport2.ID,keyboardReport2.bytes
+                    ConnectedDevice.device,KeyboardReport2.ID,keyboardReport2.bytes
             )
 
-            sendKeyUp()
+            sendKeyUp2()
+
+            keyboardReport2.leftShift = false
+            keyboardReport2.leftControl = false
+            keyboardReport2.leftAlt = false
+            keyboardReport2.leftGui = false
         }
 
-        fun keyboardReportSendKey(keyCode:Int, modifierKey: String){
-            var key = 0
-            if (keyCode2KeyCode.regularPhysicsKey.containsKey(keyCode)){
-                key = keyCode2KeyCode.keyMap.getOrDefault(keyCode2KeyCode.regularPhysicsKey.getOrDefault(keyCode,','),0)
-            }
-            if (keyCode2KeyCode.specialPhysicsKey.containsKey(keyCode)){
-                key = keyCode2KeyCode.scancode.getOrDefault(keyCode2KeyCode.specialPhysicsKey.getOrDefault(keyCode,"Space"),0)
-            }
+//        fun keyboardReportSendKey2(keyCode:Int, modifierKey: String){
+//            if (modifierKey == "Shift") keyboardReport2.leftShift = true
+//            if (modifierKey == "Ctrl") keyboardReport2.leftControl = true
+//            if (modifierKey == "Alt") keyboardReport2.leftAlt = true
+//            if (modifierKey == "Window") keyboardReport2.leftGui = true
+//            var key = 0
+//            // if keyCode is 0, then key will be 0
+//            if (keyCode2KeyCode.regularPhysicsKey.containsKey(keyCode)){
+//                key = keyCode2KeyCode.keyMap.getOrDefault(keyCode2KeyCode.regularPhysicsKey.getOrDefault(keyCode,','),0)
+//            }
+//            if (keyCode2KeyCode.specialPhysicsKey.containsKey(keyCode)){
+//                key = keyCode2KeyCode.scancode.getOrDefault(keyCode2KeyCode.specialPhysicsKey.getOrDefault(keyCode,"Space"),0)
+//            }
+//            keyboardReport2.key1=key.toByte()
+//            bthid.sendReport(
+//                ConnectedDevice.device,KeyboardReport2.ID,keyboardReport2.bytes
+//            )
+//
+//            sendKeyUp()
+//
+//            keyboardReport2.leftShift = false
+//            keyboardReport2.leftControl = false
+//            keyboardReport2.leftAlt = false
+//            keyboardReport2.leftGui = false
+//        }
 
-            var modifier = 0
-            if (modifierKey == "Ctrl") modifier = 1
-            if (modifierKey == "Shift") modifier = 2
-            if (modifierKey == "Alt") modifier = 4
-            if (modifierKey == "Window") modifier = 8
-            val data = keyboardReport.setValue(modifier,key,0,0,0,0,0)
-            bthid.sendReport(
-                ConnectedDevice.device,KeyboardReport2.ID,data
-            )
-            sendKeyUp()
-        }
+//        fun keyboardReportSendKey(keyCode:Int, modifierKey: String){
+//            var key = 0
+//            if (keyCode2KeyCode.regularPhysicsKey.containsKey(keyCode)){
+//                key = keyCode2KeyCode.keyMap.getOrDefault(keyCode2KeyCode.regularPhysicsKey.getOrDefault(keyCode,','),0)
+//            }
+//            if (keyCode2KeyCode.specialPhysicsKey.containsKey(keyCode)){
+//                key = keyCode2KeyCode.scancode.getOrDefault(keyCode2KeyCode.specialPhysicsKey.getOrDefault(keyCode,"Space"),0)
+//            }
+//
+//            var modifier = 0
+//            if (modifierKey == "Ctrl") modifier = 1
+//            if (modifierKey == "Shift") modifier = 2
+//            if (modifierKey == "Alt") modifier = 4
+//            if (modifierKey == "Window") modifier = 8
+//            val data = keyboardReport.setValue(modifier,key,0,0,0,0,0)
+//            bthid.sendReport(
+//                ConnectedDevice.device,KeyboardReport2.ID,data
+//            )
+//            sendKeyUp()
+//        }
 
         var latestSentTime = System.currentTimeMillis()
+
+        // there should only one view in the layout.xml, otherwise, tab key would jump on other view, and tab key captured by android itself, not will send tab to other OS
         val editTextView = findViewById<EditText>(R.id.edit_text)
         editTextView?.requestFocus()
 
@@ -194,7 +242,7 @@ class KeyboardActivity : AppCompatActivity() {
                 if (keyCode == KeyEvent.KEYCODE_ALT_LEFT || keyCode == KeyEvent.KEYCODE_ALT_RIGHT) { isAltPressed = false }
                 if (keyCode == KeyEvent.KEYCODE_CTRL_LEFT || keyCode == KeyEvent.KEYCODE_CTRL_RIGHT) { isCtrlPressed = false }
                 if (keyCode == KeyEvent.KEYCODE_SHIFT_LEFT || keyCode == KeyEvent.KEYCODE_SHIFT_RIGHT) {
-                   if (!isShiftPressedWithOthers) {keyboardReportSendKey(0, "Shift")}
+                   if (!isShiftPressedWithOthers) {keyboardReportSendKey2(0, "Shift")}
                     isShiftPressed = false
                 }
             }
@@ -217,21 +265,21 @@ class KeyboardActivity : AppCompatActivity() {
                    }
 
                    if (isCapsLockPressed) {
-                       if (keyCode != KeyEvent.KEYCODE_CAPS_LOCK) keyboardReportSendKey(keyCode,"Ctrl")
+                       if (keyCode != KeyEvent.KEYCODE_CAPS_LOCK) keyboardReportSendKey2(keyCode,"Ctrl")
                    }
                    else if (isAltPressed) {
-                       if (keyCode != KeyEvent.KEYCODE_ALT_LEFT   &&   keyCode != KeyEvent.KEYCODE_ALT_RIGHT) keyboardReportSendKey(keyCode,"Alt")
+                       if (keyCode != KeyEvent.KEYCODE_ALT_LEFT   &&   keyCode != KeyEvent.KEYCODE_ALT_RIGHT) keyboardReportSendKey2(keyCode,"Alt")
                    }
                    else if (isCtrlPressed) {
-                      if (keyCode != KeyEvent.KEYCODE_CTRL_LEFT   &&   keyCode != KeyEvent.KEYCODE_CTRL_RIGHT) keyboardReportSendKey(keyCode,"Ctrl")
+                      if (keyCode != KeyEvent.KEYCODE_CTRL_LEFT   &&   keyCode != KeyEvent.KEYCODE_CTRL_RIGHT) keyboardReportSendKey2(keyCode,"Ctrl")
                    }
                    else if (isShiftPressed) {
                        if (keyCode != KeyEvent.KEYCODE_SHIFT_LEFT   &&   keyCode != KeyEvent.KEYCODE_SHIFT_RIGHT){
-                           keyboardReportSendKey(keyCode, "Shift")
+                           keyboardReportSendKey2(keyCode, "Shift")
                            isShiftPressedWithOthers = true
                        }
                    }
-                   else sendKey(keyCode)
+                   else sendKey2(keyCode)
                }
                 else {
                    btAdapter.getProfileProxy(this,
