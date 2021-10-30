@@ -19,28 +19,38 @@ class BluetoothCallback(val context: Context, val btHid: BluetoothHidDevice, val
         if (pluggedDevice != null) { println(" --- plugged device is   ${pluggedDevice.name}") }
         if (registered) {
             var pairedDevices = btHid.getDevicesMatchingConnectionStates(intArrayOf(BluetoothProfile.STATE_CONNECTING, BluetoothProfile.STATE_CONNECTED, BluetoothProfile.STATE_DISCONNECTED, BluetoothProfile.STATE_DISCONNECTING))
+            // paired device may only contain one, it is not like bonded device
             println( "--- paired devices are : ${pairedDevices.map { it.name }}")
 
-            if (pairedDevices.isNotEmpty()){
-                val state  = btHid.getConnectionState(pairedDevices?.get(0))
-                println("--- first connection is ${pairedDevices.get(0).name}, state is ${when(state) {
+//            if (pairedDevices.isNotEmpty()){
+//                val state  = btHid.getConnectionState(pairedDevices?.get(0))
+//                println("--- first connection is ${pairedDevices.get(0).name}, state is ${when(state) {
+//                    BluetoothProfile.STATE_CONNECTING -> "CONNECTING"
+//                    BluetoothProfile.STATE_CONNECTED -> "CONNECTED"
+//                    BluetoothProfile.STATE_DISCONNECTING -> "DISCONNECTING"
+//                    BluetoothProfile.STATE_DISCONNECTED -> "DISCONNECTED"
+//                    else -> state.toString()
+//                }}")
+//
+//                if (state == BluetoothProfile.STATE_CONNECTED){
+//                    btHid.disconnect(pairedDevices.get(0))
+//                }
+//            }
+
+            pairedDevices.map {
+                val state = btHid.getConnectionState(it)
+                println("--- paired device ${it.name} is ${when(state) {
                     BluetoothProfile.STATE_CONNECTING -> "CONNECTING"
                     BluetoothProfile.STATE_CONNECTED -> "CONNECTED"
                     BluetoothProfile.STATE_DISCONNECTING -> "DISCONNECTING"
                     BluetoothProfile.STATE_DISCONNECTED -> "DISCONNECTED"
                     else -> state.toString()
                 }}")
-
-                if (state == BluetoothProfile.STATE_CONNECTED){
-                    btHid.disconnect(pairedDevices.get(0))
-                }
-
-
+                if (state == BluetoothProfile.STATE_CONNECTED && it.name != TARGET_DEVICE_NAME) btHid.disconnect(it)
             }
 
-
             btAdapter.bondedDevices.map {
-                println(it.name)
+                println("--- bonded device is ${it.name}")
                 if (it.name == TARGET_DEVICE_NAME) {
                     if (!btHid.connectedDevices.contains(it)) btHid.connect(it)
                 }
@@ -121,6 +131,40 @@ class BluetoothCallback(val context: Context, val btHid: BluetoothHidDevice, val
 //            ConnectedDevice.device = null
 //        }
     }
+
+    val featureReport = FeatureReport()
+
+    override fun onSetReport(device: BluetoothDevice?, type: Byte, id: Byte, data: ByteArray?) {
+        Log.i("setfirst","setfirst")
+        super.onSetReport(device, type, id, data)
+        Log.i("setreport","this $device and $type and $id and $data")
+
+        CoroutineScope(Dispatchers.Main).launch {
+            Toast.makeText(context,"onSetReport", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    override fun onGetReport(device: BluetoothDevice?, type: Byte, id: Byte, bufferSize: Int) {
+
+        Log.i("getbefore", "first")
+        super.onGetReport(device, type, id, bufferSize)
+
+        CoroutineScope(Dispatchers.Main).launch {
+            Toast.makeText(context,"onGetReport", Toast.LENGTH_SHORT).show()
+        }
+
+        Log.i("get", "second")
+        if (type == BluetoothHidDevice.REPORT_TYPE_FEATURE) {
+            featureReport.wheelResolutionMultiplier = true
+            featureReport.acPanResolutionMultiplier = true
+            Log.i("getbthid","$btHid")
+
+            var wasrs=btHid?.replyReport(device, type, FeatureReport.ID, featureReport.bytes)
+            Log.i("replysuccess flag ",wasrs.toString())
+        }
+
+    }
+
 
 }
 

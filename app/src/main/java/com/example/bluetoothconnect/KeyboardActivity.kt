@@ -47,16 +47,17 @@ class KeyboardActivity : AppCompatActivity() {
                     }
                     override fun onServiceConnected(profile: Int, proxy: BluetoothProfile?) {
                         println("--- connected, profile is $profile")
-                        if (profile == BluetoothProfile.HID_DEVICE) {
-                            // get bthid
-                            bthid = proxy as BluetoothHidDevice
-                            println("--- got hid proxy object ")
-                            val btcallback = BluetoothCallback(this@KeyboardActivity,bthid, btAdapter,TARGET_DEVICE_NAME)
-                            bthid.registerApp(sdpRecord, null, qosOut, {it.run()}, btcallback)
+                        if (profile != BluetoothProfile.HID_DEVICE) {
+                            return
+                        }
+                        // get bthid
+                        bthid = proxy as BluetoothHidDevice
+                        println("--- got hid proxy object ")
+                        val btcallback = BluetoothCallback(this@KeyboardActivity,bthid, btAdapter,TARGET_DEVICE_NAME)
+                        bthid.registerApp(sdpRecord, null, qosOut, {it.run()}, btcallback)
 //                            bthid.registerApp(
 //                                    Constants.SDP_RECORD, null, Constants.QOS_OUT, Executor { obj: Runnable -> obj.run() }, btcallback
 //                            )
-                        }
                     }
                 }
                 , BluetoothProfile.HID_DEVICE)
@@ -280,29 +281,28 @@ class KeyboardActivity : AppCompatActivity() {
 
     }
 
-    override fun onResume() {
-        super.onResume()
-
+    override fun onRestart() {
+        super.onRestart()
         btAdapter.getProfileProxy(this,
-            object : BluetoothProfile.ServiceListener{
-                override fun onServiceDisconnected(profile: Int) {
-                    println("--- Disconnect, profile is $profile")
-                }
-                override fun onServiceConnected(profile: Int, proxy: BluetoothProfile?) {
-                    println("--- connected, profile is $profile")
-                    if (profile == BluetoothProfile.HID_DEVICE) {
-                        // get bthid
-                        bthid = proxy as BluetoothHidDevice
-                        println("--- got hid proxy object ")
-                        val btcallback = BluetoothCallback(this@KeyboardActivity,bthid, btAdapter,TARGET_DEVICE_NAME)
-                        bthid.registerApp(sdpRecord, null, qosOut, {it.run()}, btcallback)
+                object : BluetoothProfile.ServiceListener{
+                    override fun onServiceDisconnected(profile: Int) {
+                        println("--- Disconnect, profile is $profile")
+                    }
+                    override fun onServiceConnected(profile: Int, proxy: BluetoothProfile?) {
+                        println("--- connected, profile is $profile")
+                        if (profile == BluetoothProfile.HID_DEVICE) {
+                            // get bthid
+                            bthid = proxy as BluetoothHidDevice
+                            println("--- got hid proxy object ")
+                            val btcallback = BluetoothCallback(this@KeyboardActivity,bthid, btAdapter,TARGET_DEVICE_NAME)
+                            bthid.registerApp(sdpRecord, null, qosOut, {it.run()}, btcallback)
 //                            bthid.registerApp(
 //                                    Constants.SDP_RECORD, null, Constants.QOS_OUT, Executor { obj: Runnable -> obj.run() }, btcallback
 //                            )
+                        }
                     }
                 }
-            }
-            , BluetoothProfile.HID_DEVICE)
+                , BluetoothProfile.HID_DEVICE)
     }
 
     private val sdpRecord by lazy {

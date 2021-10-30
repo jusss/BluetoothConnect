@@ -2,13 +2,69 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 android:layout_width="match_parent" android:layout_height="match_parent">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAllCaps="false"
+        android:text="Windows shortcut hotkey"
+        android:id="@+id/windows"/>
+
+    <Button
+        android:id="@+id/win_r"
+        android:layout_below="@+id/windows"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Win r"
+        android:textAllCaps="false"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/win_m"
+        android:layout_below="@+id/win_r"
+        android:text="Win m"
+        android:textAllCaps="false"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/win_tab"
+        android:layout_below="@+id/win_m"
+        android:text="Win tab"
+        android:textAllCaps="false"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ctrl_alt_del"
+        android:layout_below="@+id/win_tab"
+        android:text="ctrl alt del "
+        android:textAllCaps="false"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAllCaps="false"
+        android:layout_below="@id/ctrl_alt_del"
+        android:text="Android shortcut hotkey"
+        android:id="@+id/android"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/app_switch"
+        android:layout_below="@+id/android"
+        android:text="app switch"
+        android:textAllCaps="false"/>
+
 <EditText
+    android:layout_below="@+id/app_switch"
     android:id="@+id/edit_text"
-    android:hint="connect your wired keyboard by otg, set aosp keyboard as input method"
+    android:hint="connect your wired keyboard by otg, set aosp English keyboard as input method"
     android:theme="@style/MyEditText"
     android:textCursorDrawable="@drawable/cursor_color"
     android:background="@null"
-    android:layout_width="320dp"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"/>
 
 </RelativeLayout>
