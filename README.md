@@ -10,16 +10,24 @@ Use Android as A Bluetooth Keyboard, support OTG Keyboard too
 
 
 # How to Use for Archlinux
-pair and connect not same thing in archlinux, if you pair it, but it may not be connected, you have to connect by right click on it 'connect',
-on windows 10, in the settings, after pair, it will auto be connected,
-the important thing is run this app and then connect it, you can't connect it before this app run,
-systemctl start lightdm, or systemctl start bluetooth; blueman-applet; blueman-manager
-1. pair android and archlinux
-2. open this app choose archlinux device name
-3. forget archlinux device name in android 
-4. archlinux blueman-manager right click on android device name, choose 'connect'
-5. pair each other
-6. it works
+1. connect to wifi, bluetooth and wifi on same chip, so need wifi is on
+2. pair android and archlinux 
+3. open app, choose archlinux device name, press home button to put app on backgroup
+4. forget device on archlinux (or android, just one is ok)
+4. on andriod, app switcher, back to app
+6. now it pop pair up dialog, pair it!
+
+
+-- pair and connect not same thing in archlinux, if you pair it, but it may not be connected, you have to connect by right click on it 'connect',
+-- on windows 10, in the settings, after pair, it will auto be connected,
+-- the important thing is run this app and then connect it, you can't connect it before this app run,
+-- systemctl start lightdm, or systemctl start bluetooth; blueman-applet; blueman-manager
+-- 1. pair android and archlinux
+-- 2. open this app choose archlinux device name
+-- 3. forget archlinux device name in android 
+-- 4. archlinux blueman-manager right click on android device name, choose 'connect'
+-- 5. pair each other
+-- 6. it works
 
 # Reference
 https://github.com/ginkage/wearmouse<br/>

@@ -21,6 +21,7 @@ class KeyboardActivity : AppCompatActivity() {
     var isCtrlPressed = false
     var isShiftPressed = false
     var isShiftPressedWithOthers = false
+    var isWindowPressed = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -104,6 +105,39 @@ class KeyboardActivity : AppCompatActivity() {
             }
         }
 
+        fun sendKey3(keyCode: Int){
+            if (isShiftPressed) {
+                keyboardReport2.leftShift = true
+                isShiftPressedWithOthers = true
+            }
+            if (isCtrlPressed) keyboardReport2.leftControl = true
+            if (isAltPressed) keyboardReport2.leftAlt = true
+            if (isWindowPressed) keyboardReport2.leftGui = true
+            if (isCapsLockPressed) keyboardReport2.leftControl = true
+
+            var key = 0
+            // if keyCode is 0, then key will be 0
+            key = KeyboardReport2.KeyEventMap.get(keyCode) ?: 0
+            keyboardReport2.key1=key.toByte()
+            bthid.sendReport(
+                    ConnectedDevice.device,KeyboardReport2.ID,keyboardReport2.bytes
+            )
+
+            sendKeyUp2()
+
+            keyboardReport2.leftShift = false
+            keyboardReport2.leftControl = false
+            keyboardReport2.leftAlt = false
+            keyboardReport2.leftGui = false
+//            isShiftPressed = false
+////            isShiftPressedWithOthers = false
+//            isCtrlPressed = false
+//            isAltPressed =false
+//            isWindowPressed = false
+//            isCapsLockPressed = false
+
+        }
+
         fun keyboardReportSendKey2(keyCode:Int, modifierKey: String){
             if (modifierKey == "Shift") keyboardReport2.leftShift = true
             if (modifierKey == "Ctrl") keyboardReport2.leftControl = true
@@ -180,51 +214,6 @@ class KeyboardActivity : AppCompatActivity() {
 
         editTextView?.setOnKeyListener { v: View?, keyCode: Int, event: KeyEvent? ->
 
-//            if (event!!.isLongPress   &&   keyCode == KeyEvent.KEYCODE_CAPS_LOCK) isCapsLockPressed = true
-//            else isCapsLockPressed = false
-
-//            if (event!!.isCapsLockOn) {
-//                keyboardReportSendKey(keyCode,"Ctrl")
-//                println("--- capslock is on and send as ctrl")
-//                println("--- keycode is $keyCode")
-//            }
-
-//            if (event!!.isShiftPressed()){
-//                val pressedTime = System.currentTimeMillis()
-//                if ((pressedTime - latestSentTime) > 160L && (keyCode != 59)) {
-//                    // shift is 59, press shift ? will send shift then shift ?, so block single shift
-//                    // shift space, it will send twice key event, reduce one
-//                    sendModifierKey(keyCode,"Shift")
-////                    keyboardReportSendKey(keyCode,"Shift")
-////                    println("keycode is $keyCode, with Shift ")
-//                    latestSentTime = pressedTime
-//                }
-//                return@setOnKeyListener true
-//            }
-
-//            if (event!!.isCtrlPressed()){
-//                val pressedTime = System.currentTimeMillis()
-//                if ((pressedTime - latestSentTime) > 160L   &&   (keyCode != 113)) {
-//                    // shift space, it will send twice key event, reduce one
-//
-//                    keyboardReportSendKey(keyCode,"Ctrl")
-////                    println("keycode is $keyCode, with Ctrl ")
-//                    latestSentTime = pressedTime
-//                }
-//                return@setOnKeyListener true
-//            }
-
-//            if (event!!.isAltPressed()){
-//                val pressedTime = System.currentTimeMillis()
-//                if ((pressedTime - latestSentTime) > 160L   &&   (keyCode != 57)) {
-//                    // shift space, it will send twice key event, reduce one
-//                    keyboardReportSendKey(keyCode,"Alt")
-////                    println("keycode is $keyCode, with Alt ")
-//                    latestSentTime = pressedTime
-//                }
-//                return@setOnKeyListener true
-//            }
-
             // windows key is search key in android, but there is no keycode for window key or fn key by otg wired keyboard input
 //            if (event!!.isMetaPressed()){
 //                val pressedTime = System.currentTimeMillis()
@@ -244,6 +233,8 @@ class KeyboardActivity : AppCompatActivity() {
                 if (keyCode == KeyEvent.KEYCODE_SHIFT_LEFT || keyCode == KeyEvent.KEYCODE_SHIFT_RIGHT) {
                    if (!isShiftPressedWithOthers) {keyboardReportSendKey2(0, "Shift")}
                     isShiftPressed = false
+//                    if (!isShiftPressedWithOthers) {sendKey3(0)}
+//                    isShiftPressed = false
                 }
             }
 
@@ -264,22 +255,25 @@ class KeyboardActivity : AppCompatActivity() {
                        isShiftPressedWithOthers = false
                    }
 
-                   if (isCapsLockPressed) {
-                       if (keyCode != KeyEvent.KEYCODE_CAPS_LOCK) keyboardReportSendKey2(keyCode,"Ctrl")
-                   }
-                   else if (isAltPressed) {
-                       if (keyCode != KeyEvent.KEYCODE_ALT_LEFT   &&   keyCode != KeyEvent.KEYCODE_ALT_RIGHT) keyboardReportSendKey2(keyCode,"Alt")
-                   }
-                   else if (isCtrlPressed) {
-                      if (keyCode != KeyEvent.KEYCODE_CTRL_LEFT   &&   keyCode != KeyEvent.KEYCODE_CTRL_RIGHT) keyboardReportSendKey2(keyCode,"Ctrl")
-                   }
-                   else if (isShiftPressed) {
-                       if (keyCode != KeyEvent.KEYCODE_SHIFT_LEFT   &&   keyCode != KeyEvent.KEYCODE_SHIFT_RIGHT){
-                           keyboardReportSendKey2(keyCode, "Shift")
-                           isShiftPressedWithOthers = true
-                       }
-                   }
-                   else sendKey2(keyCode)
+//                   if (isCapsLockPressed) {
+//                       if (keyCode != KeyEvent.KEYCODE_CAPS_LOCK) keyboardReportSendKey2(keyCode,"Ctrl")
+//                   }
+//                   else if (isAltPressed) {
+//                       if (keyCode != KeyEvent.KEYCODE_ALT_LEFT   &&   keyCode != KeyEvent.KEYCODE_ALT_RIGHT) keyboardReportSendKey2(keyCode,"Alt")
+//                   }
+//                   else if (isCtrlPressed) {
+//                      if (keyCode != KeyEvent.KEYCODE_CTRL_LEFT   &&   keyCode != KeyEvent.KEYCODE_CTRL_RIGHT) keyboardReportSendKey2(keyCode,"Ctrl")
+//                   }
+//                   else
+//                       if (isShiftPressed) {
+//                       if (keyCode != KeyEvent.KEYCODE_SHIFT_LEFT   &&   keyCode != KeyEvent.KEYCODE_SHIFT_RIGHT){
+//                           keyboardReportSendKey2(keyCode, "Shift")
+//                           isShiftPressedWithOthers = true
+//                       }
+//                   }
+//                   else
+                   if (keyCode != KeyEvent.KEYCODE_SHIFT_LEFT && keyCode != KeyEvent.KEYCODE_SHIFT_RIGHT)
+                           sendKey3(keyCode)
                }
                 else {
                    btAdapter.getProfileProxy(this,
