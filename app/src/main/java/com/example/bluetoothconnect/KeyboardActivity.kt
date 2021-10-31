@@ -123,11 +123,11 @@ class KeyboardActivity : AppCompatActivity() {
                     ConnectedDevice.device,KeyboardReport2.ID,keyboardReport2.bytes
             )
 
-            sendKeyUp2()
+//            sendKeyUp2()
 
             keyboardReport2.leftShift = false
             keyboardReport2.leftControl = false
-            keyboardReport2.leftAlt = false
+//            keyboardReport2.leftAlt = false
             keyboardReport2.leftGui = false
 //            isShiftPressed = false
 ////            isShiftPressedWithOthers = false
@@ -157,6 +157,15 @@ class KeyboardActivity : AppCompatActivity() {
             keyboardReport2.leftControl = false
             keyboardReport2.leftAlt = false
             keyboardReport2.leftGui = false
+        }
+
+
+        fun sendKeyDown(keyCode:Int){
+            if (keyCode == KeyEvent.KEYCODE_ALT_LEFT || keyCode == KeyEvent.KEYCODE_ALT_RIGHT) keyboardReport2.leftAlt = true
+//            keyboardReport2.key1=0.toByte()
+            bthid.sendReport(
+                    ConnectedDevice.device,KeyboardReport2.ID,keyboardReport2.bytes
+            )
         }
 
 //        fun keyboardReportSendKey2(keyCode:Int, modifierKey: String){
@@ -226,9 +235,26 @@ class KeyboardActivity : AppCompatActivity() {
 //                return@setOnKeyListener true
 //            }
 
+
+            // 1. key down , another key down will make previous up
+            // 2.  keyboardReportSendKey2(0, "Alt") make alt key up
+            // 3. sendKeyDown make alt key down
+            // 4. sendKeyUp2 make no modifier key up
+            // 5. sendKey3, key down
+            // 6. alt tab, need alt down, tab down, tab up, alt up
+
+            // two same modifier key will make modifier key up and down, sendKeyDown()
+            // send 0 make regular key up, sendKeyUp2()
+            //
+
+
             if (event?.action == KeyEvent.ACTION_UP) {
                 if (keyCode == KeyEvent.KEYCODE_CAPS_LOCK) { isCapsLockPressed = false }
-                if (keyCode == KeyEvent.KEYCODE_ALT_LEFT || keyCode == KeyEvent.KEYCODE_ALT_RIGHT) { isAltPressed = false }
+                if (keyCode == KeyEvent.KEYCODE_ALT_LEFT || keyCode == KeyEvent.KEYCODE_ALT_RIGHT) {
+                    isAltPressed = false ;
+                    // alt key up
+//                    keyboardReportSendKey2(0, "Alt")
+                }
                 if (keyCode == KeyEvent.KEYCODE_CTRL_LEFT || keyCode == KeyEvent.KEYCODE_CTRL_RIGHT) { isCtrlPressed = false }
                 if (keyCode == KeyEvent.KEYCODE_SHIFT_LEFT || keyCode == KeyEvent.KEYCODE_SHIFT_RIGHT) {
                    if (!isShiftPressedWithOthers) {keyboardReportSendKey2(0, "Shift")}
@@ -236,6 +262,8 @@ class KeyboardActivity : AppCompatActivity() {
 //                    if (!isShiftPressedWithOthers) {sendKey3(0)}
 //                    isShiftPressed = false
                 }
+
+                sendKeyUp2()
             }
 
             if (event?.action == KeyEvent.ACTION_DOWN) {
@@ -246,11 +274,15 @@ class KeyboardActivity : AppCompatActivity() {
                    }
                    if (keyCode == KeyEvent.KEYCODE_ALT_LEFT || keyCode == KeyEvent.KEYCODE_ALT_RIGHT) {
                        isAltPressed = true
+                       // alt tab swith window, alt down, tab down, tab up, alt up, keey alt down
+                       // alt key down
+                       sendKeyDown(keyCode)
                    }
                    if (keyCode == KeyEvent.KEYCODE_CTRL_LEFT || keyCode == KeyEvent.KEYCODE_CTRL_RIGHT){
                        isCtrlPressed = true
                    }
                    if (keyCode == KeyEvent.KEYCODE_SHIFT_LEFT || keyCode == KeyEvent.KEYCODE_SHIFT_RIGHT){
+                       // shift pressed and hold only send one shift key event when released for shift switch input method
                        isShiftPressed = true ;
                        isShiftPressedWithOthers = false
                    }
@@ -272,7 +304,7 @@ class KeyboardActivity : AppCompatActivity() {
 //                       }
 //                   }
 //                   else
-                   if (keyCode != KeyEvent.KEYCODE_SHIFT_LEFT && keyCode != KeyEvent.KEYCODE_SHIFT_RIGHT)
+                   if (keyCode != KeyEvent.KEYCODE_SHIFT_LEFT && keyCode != KeyEvent.KEYCODE_SHIFT_RIGHT && keyCode != KeyEvent.KEYCODE_ALT_LEFT && keyCode != KeyEvent.KEYCODE_ALT_RIGHT)
                            sendKey3(keyCode)
                }
                 else {
