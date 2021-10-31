@@ -247,15 +247,6 @@ class KeyboardActivity : AppCompatActivity() {
             // send 0 make regular key up, sendKeyUp2()
             //
 
-            // if (!isAltPressed) sendKeyDown(keyCode)
-            // send modifier will make regular key up
-            // so send alt key down, send tab key down, it will switch window
-            // send alt key down again, it will make tab key up
-            // hold alt only send one alt key down, sendKey3(tab) make tab down
-            // cause hold alt only send one send down, now its switching window
-            // tab up choose window by send 0 with sendKeyUp2()
-
-            // send modifier key down won't make regular key up
 
             if (event?.action == KeyEvent.ACTION_UP) {
                 if (keyCode == KeyEvent.KEYCODE_CAPS_LOCK) { isCapsLockPressed = false }
@@ -263,7 +254,6 @@ class KeyboardActivity : AppCompatActivity() {
                     isAltPressed = false ;
                     // alt key up
 //                    keyboardReportSendKey2(0, "Alt")
-//                    sendKeyUp2()
                 }
                 if (keyCode == KeyEvent.KEYCODE_CTRL_LEFT || keyCode == KeyEvent.KEYCODE_CTRL_RIGHT) { isCtrlPressed = false }
                 if (keyCode == KeyEvent.KEYCODE_SHIFT_LEFT || keyCode == KeyEvent.KEYCODE_SHIFT_RIGHT) {
@@ -274,7 +264,6 @@ class KeyboardActivity : AppCompatActivity() {
                 }
 
                 sendKeyUp2()
-                if (isAltPressed) sendKeyDown(KeyEvent.KEYCODE_ALT_LEFT)
             }
 
             if (event?.action == KeyEvent.ACTION_DOWN) {
@@ -288,8 +277,6 @@ class KeyboardActivity : AppCompatActivity() {
                        // alt tab swith window, alt down, tab down, tab up, alt up, keey alt down
                        // alt key down
                        sendKeyDown(keyCode)
-                       // hold alt, only send one alt key down
-                       if (!isAltPressed) sendKeyDown(keyCode)
                    }
                    if (keyCode == KeyEvent.KEYCODE_CTRL_LEFT || keyCode == KeyEvent.KEYCODE_CTRL_RIGHT){
                        isCtrlPressed = true

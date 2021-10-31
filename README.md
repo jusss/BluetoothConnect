@@ -18,7 +18,7 @@ Use Android as A Bluetooth Keyboard, support OTG Keyboard too
 6. now it pop pair up dialog, pair it!
 
 # Switch Window 
- 'cause android capture Alt Tab, so, use Alt ` to switch window, hold Alt and ` together will switch window, release tab will choose current window 
+ 'cause android capture Alt Tab, so, use Alt ` to switch window
 
 
 -- pair and connect not same thing in archlinux, if you pair it, but it may not be connected, you have to connect by right click on it 'connect',
