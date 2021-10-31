@@ -22,7 +22,6 @@ class KeyboardActivity : AppCompatActivity() {
     var isShiftPressed = false
     var isShiftPressedWithOthers = false
     var isWindowPressed = false
-    var isAltRepeat = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -117,18 +116,8 @@ class KeyboardActivity : AppCompatActivity() {
             if (isCapsLockPressed) keyboardReport2.leftControl = true
 
             var key = 0
-
-            // replace ALt ` to Alt Tab
-            if (keyCode == KeyEvent.KEYCODE_GRAVE && isAltPressed){
-                key = KeyboardReport2.KeyEventMap.get(KeyEvent.KEYCODE_TAB) ?: 0
-            }
-            else{
-                // if keyCode is 0, then key will be 0
-                key = KeyboardReport2.KeyEventMap.get(keyCode) ?: 0
-            }
-
-
-
+            // if keyCode is 0, then key will be 0
+            key = KeyboardReport2.KeyEventMap.get(keyCode) ?: 0
             keyboardReport2.key1=key.toByte()
             bthid.sendReport(
                     ConnectedDevice.device,KeyboardReport2.ID,keyboardReport2.bytes
@@ -173,11 +162,6 @@ class KeyboardActivity : AppCompatActivity() {
 
         fun sendKeyDown(keyCode:Int){
             if (keyCode == KeyEvent.KEYCODE_ALT_LEFT || keyCode == KeyEvent.KEYCODE_ALT_RIGHT) keyboardReport2.leftAlt = true
-            if (keyCode == KeyEvent.KEYCODE_CTRL_LEFT || keyCode == KeyEvent.KEYCODE_CTRL_RIGHT) keyboardReport2.leftControl = true
-            if (keyCode == KeyEvent.KEYCODE_SHIFT_LEFT || keyCode == KeyEvent.KEYCODE_SHIFT_RIGHT) keyboardReport2.leftShift = true
-            if (keyCode == KeyEvent.KEYCODE_WINDOW)  keyboardReport2.leftGui = true
-            if (keyCode == KeyEvent.KEYCODE_CAPS_LOCK) keyboardReport2.leftControl = true
-
 //            keyboardReport2.key1=0.toByte()
             bthid.sendReport(
                     ConnectedDevice.device,KeyboardReport2.ID,keyboardReport2.bytes
@@ -273,10 +257,6 @@ class KeyboardActivity : AppCompatActivity() {
 
             // send modifier key down won't make regular key up
 
-            // switch window, normal behavior, alt key down, tab key down, tab key up with alt key down
-
-            // only modifier alt key down, regular key hold only send one key down
-
             if (event?.action == KeyEvent.ACTION_UP) {
                 if (keyCode == KeyEvent.KEYCODE_CAPS_LOCK) { isCapsLockPressed = false }
                 if (keyCode == KeyEvent.KEYCODE_ALT_LEFT || keyCode == KeyEvent.KEYCODE_ALT_RIGHT) {
@@ -295,8 +275,6 @@ class KeyboardActivity : AppCompatActivity() {
 
                 sendKeyUp2()
                 if (isAltPressed) sendKeyDown(KeyEvent.KEYCODE_ALT_LEFT)
-                if (isCapsLockPressed) sendKeyDown(KeyEvent.KEYCODE_CTRL_LEFT)
-                if (isCtrlPressed) sendKeyDown(KeyEvent.KEYCODE_CTRL_LEFT)
             }
 
             if (event?.action == KeyEvent.ACTION_DOWN) {
@@ -304,8 +282,6 @@ class KeyboardActivity : AppCompatActivity() {
 //                   println("--- keycode is $keyCode")
                    if (keyCode == KeyEvent.KEYCODE_CAPS_LOCK) {
                        isCapsLockPressed = true
-                       sendKeyDown(keyCode)
-                       if (!isCapsLockPressed) sendKeyDown(keyCode)
                    }
                    if (keyCode == KeyEvent.KEYCODE_ALT_LEFT || keyCode == KeyEvent.KEYCODE_ALT_RIGHT) {
                        isAltPressed = true
@@ -317,8 +293,6 @@ class KeyboardActivity : AppCompatActivity() {
                    }
                    if (keyCode == KeyEvent.KEYCODE_CTRL_LEFT || keyCode == KeyEvent.KEYCODE_CTRL_RIGHT){
                        isCtrlPressed = true
-                       sendKeyDown(keyCode)
-                       if (!isCtrlPressed) sendKeyDown(keyCode)
                    }
                    if (keyCode == KeyEvent.KEYCODE_SHIFT_LEFT || keyCode == KeyEvent.KEYCODE_SHIFT_RIGHT){
                        // shift pressed and hold only send one shift key event when released for shift switch input method
@@ -326,16 +300,24 @@ class KeyboardActivity : AppCompatActivity() {
                        isShiftPressedWithOthers = false
                    }
 
-//                   if (isAltPressed){
-//                        val pressedTime = System.currentTimeMillis()
-//                        if ((pressedTime - latestSentTime) > 2000L) {
-//                            sendKey3(keyCode)
-//                        }
-//                       latestSentTime = pressedTime
+//                   if (isCapsLockPressed) {
+//                       if (keyCode != KeyEvent.KEYCODE_CAPS_LOCK) keyboardReportSendKey2(keyCode,"Ctrl")
+//                   }
+//                   else if (isAltPressed) {
+//                       if (keyCode != KeyEvent.KEYCODE_ALT_LEFT   &&   keyCode != KeyEvent.KEYCODE_ALT_RIGHT) keyboardReportSendKey2(keyCode,"Alt")
+//                   }
+//                   else if (isCtrlPressed) {
+//                      if (keyCode != KeyEvent.KEYCODE_CTRL_LEFT   &&   keyCode != KeyEvent.KEYCODE_CTRL_RIGHT) keyboardReportSendKey2(keyCode,"Ctrl")
 //                   }
 //                   else
-                       if (!listOf<Int>(KeyEvent.KEYCODE_CAPS_LOCK, KeyEvent.KEYCODE_ALT_LEFT, KeyEvent.KEYCODE_ALT_RIGHT,
-                           KeyEvent.KEYCODE_CTRL_LEFT,KeyEvent.KEYCODE_CTRL_RIGHT,KeyEvent.KEYCODE_SHIFT_LEFT,KeyEvent.KEYCODE_SHIFT_RIGHT).contains(keyCode))
+//                       if (isShiftPressed) {
+//                       if (keyCode != KeyEvent.KEYCODE_SHIFT_LEFT   &&   keyCode != KeyEvent.KEYCODE_SHIFT_RIGHT){
+//                           keyboardReportSendKey2(keyCode, "Shift")
+//                           isShiftPressedWithOthers = true
+//                       }
+//                   }
+//                   else
+                   if (keyCode != KeyEvent.KEYCODE_SHIFT_LEFT && keyCode != KeyEvent.KEYCODE_SHIFT_RIGHT && keyCode != KeyEvent.KEYCODE_ALT_LEFT && keyCode != KeyEvent.KEYCODE_ALT_RIGHT)
                            sendKey3(keyCode)
                }
                 else {
