@@ -64,7 +64,7 @@ class KeyboardActivity : AppCompatActivity() {
                 }
                 , BluetoothProfile.HID_DEVICE)
 
-        fun sendAllKeyUp(){
+        fun sendKeyUp2(){
             keyboardReport2.bytes.fill(0)
             if (!bthid.sendReport(ConnectedDevice.device, KeyboardReport2.ID, keyboardReport2.bytes)) {
                 Log.e(" ", "Report wasn't sent")
@@ -102,11 +102,11 @@ class KeyboardActivity : AppCompatActivity() {
                 bthid.sendReport(
                         ConnectedDevice.device,KeyboardReport2.ID,keyboardReport2.bytes
                 )
-                sendAllKeyUp()
+                sendKeyUp2()
             }
         }
 
-        fun sendKeyDown3(keyCode: Int){
+        fun sendKey3(keyCode: Int){
             if (isShiftPressed) {
                 keyboardReport2.leftShift = true
                 isShiftPressedWithOthers = true
@@ -118,8 +118,8 @@ class KeyboardActivity : AppCompatActivity() {
 
             var key = 0
 
-            // replace ALt Space to Alt Tab
-            if (keyCode == KeyEvent.KEYCODE_SPACE && isAltPressed){
+            // replace ALt ` to Alt Tab
+            if (keyCode == KeyEvent.KEYCODE_GRAVE && isAltPressed){
                 key = KeyboardReport2.KeyEventMap.get(KeyEvent.KEYCODE_TAB) ?: 0
             }
             else{
@@ -127,10 +127,14 @@ class KeyboardActivity : AppCompatActivity() {
                 key = KeyboardReport2.KeyEventMap.get(keyCode) ?: 0
             }
 
+
+
             keyboardReport2.key1=key.toByte()
             bthid.sendReport(
                     ConnectedDevice.device,KeyboardReport2.ID,keyboardReport2.bytes
             )
+
+//            sendKeyUp2()
 
             keyboardReport2.leftShift = false
             keyboardReport2.leftControl = false
@@ -143,16 +147,6 @@ class KeyboardActivity : AppCompatActivity() {
 //            isWindowPressed = false
 //            isCapsLockPressed = false
 
-        }
-
-        fun sendKeyUp3(keyCode: Int){
-            var key = KeyboardReport2.KeyEventMap.get(keyCode) ?: 0
-            // scan code is press code, press code + 0x80 will be release code
-            key = key + 0x80
-            keyboardReport2.key1=key.toByte()
-            bthid.sendReport(
-                    ConnectedDevice.device,KeyboardReport2.ID,keyboardReport2.bytes
-            )
         }
 
         fun keyboardReportSendKey2(keyCode:Int, modifierKey: String){
@@ -168,7 +162,7 @@ class KeyboardActivity : AppCompatActivity() {
                     ConnectedDevice.device,KeyboardReport2.ID,keyboardReport2.bytes
             )
 
-            sendAllKeyUp()
+            sendKeyUp2()
 
             keyboardReport2.leftShift = false
             keyboardReport2.leftControl = false
@@ -258,36 +252,51 @@ class KeyboardActivity : AppCompatActivity() {
 //            }
 
 
+            // 1. key down , another key down will make previous up
+            // 2.  keyboardReportSendKey2(0, "Alt") make alt key up
+            // 3. sendKeyDown make alt key down
+            // 4. sendKeyUp2 make no modifier key up
+            // 5. sendKey3, key down
+            // 6. alt tab, need alt down, tab down, tab up, alt up
+
+            // two same modifier key will make modifier key up and down, sendKeyDown()
+            // send 0 make regular key up, sendKeyUp2()
+            //
+
+            // if (!isAltPressed) sendKeyDown(keyCode)
+            // send modifier will make regular key up
+            // so send alt key down, send tab key down, it will switch window
+            // send alt key down again, it will make tab key up
+            // hold alt only send one alt key down, sendKey3(tab) make tab down
+            // cause hold alt only send one send down, now its switching window
+            // tab up choose window by send 0 with sendKeyUp2()
+
+            // send modifier key down won't make regular key up
+
             // switch window, normal behavior, alt key down, tab key down, tab key up with alt key down
+
+            // only modifier alt key down, regular key hold only send one key down
 
             if (event?.action == KeyEvent.ACTION_UP) {
                 if (keyCode == KeyEvent.KEYCODE_CAPS_LOCK) { isCapsLockPressed = false }
-                if (keyCode == KeyEvent.KEYCODE_ALT_LEFT || keyCode == KeyEvent.KEYCODE_ALT_RIGHT) { isAltPressed = false }
+                if (keyCode == KeyEvent.KEYCODE_ALT_LEFT || keyCode == KeyEvent.KEYCODE_ALT_RIGHT) {
+                    isAltPressed = false ;
+                    // alt key up
+//                    keyboardReportSendKey2(0, "Alt")
+//                    sendKeyUp2()
+                }
                 if (keyCode == KeyEvent.KEYCODE_CTRL_LEFT || keyCode == KeyEvent.KEYCODE_CTRL_RIGHT) { isCtrlPressed = false }
                 if (keyCode == KeyEvent.KEYCODE_SHIFT_LEFT || keyCode == KeyEvent.KEYCODE_SHIFT_RIGHT) {
                    if (!isShiftPressedWithOthers) {keyboardReportSendKey2(0, "Shift")}
                     isShiftPressed = false
-//                    if (!isShiftPressedWithOthers) {sendKeyDown3(0)}
+//                    if (!isShiftPressedWithOthers) {sendKey3(0)}
 //                    isShiftPressed = false
                 }
 
-                // alt tab switch window is alt key down, tab key down, tab up, alt up
-               if (keyCode == KeyEvent.KEYCODE_SPACE && isAltPressed) {
-//                   var key = KeyboardReport2.KeyEventMap.get(KeyEvent.KEYCODE_TAB) ?: 0
-//                   key = key + 0x80
-//                   keyboardReport2.key1=key.toByte()
-//                   bthid.sendReport(
-//                           ConnectedDevice.device,KeyboardReport2.ID,keyboardReport2.bytes
-//                   )
-                   sendKeyUp3(KeyEvent.KEYCODE_TAB)
-
-               }
-                else {
-                   sendAllKeyUp()
-                   if (isAltPressed) sendKeyDown(KeyEvent.KEYCODE_ALT_LEFT)
-                   if (isCapsLockPressed) sendKeyDown(KeyEvent.KEYCODE_CTRL_LEFT)
-                   if (isCtrlPressed) sendKeyDown(KeyEvent.KEYCODE_CTRL_LEFT)
-               }
+                sendKeyUp2()
+                if (isAltPressed) sendKeyDown(KeyEvent.KEYCODE_ALT_LEFT)
+                if (isCapsLockPressed) sendKeyDown(KeyEvent.KEYCODE_CTRL_LEFT)
+                if (isCtrlPressed) sendKeyDown(KeyEvent.KEYCODE_CTRL_LEFT)
             }
 
             if (event?.action == KeyEvent.ACTION_DOWN) {
@@ -317,9 +326,17 @@ class KeyboardActivity : AppCompatActivity() {
                        isShiftPressedWithOthers = false
                    }
 
-                   if (!listOf<Int>(KeyEvent.KEYCODE_CAPS_LOCK, KeyEvent.KEYCODE_ALT_LEFT, KeyEvent.KEYCODE_ALT_RIGHT,
+//                   if (isAltPressed){
+//                        val pressedTime = System.currentTimeMillis()
+//                        if ((pressedTime - latestSentTime) > 2000L) {
+//                            sendKey3(keyCode)
+//                        }
+//                       latestSentTime = pressedTime
+//                   }
+//                   else
+                       if (!listOf<Int>(KeyEvent.KEYCODE_CAPS_LOCK, KeyEvent.KEYCODE_ALT_LEFT, KeyEvent.KEYCODE_ALT_RIGHT,
                            KeyEvent.KEYCODE_CTRL_LEFT,KeyEvent.KEYCODE_CTRL_RIGHT,KeyEvent.KEYCODE_SHIFT_LEFT,KeyEvent.KEYCODE_SHIFT_RIGHT).contains(keyCode))
-                           sendKeyDown3(keyCode)
+                           sendKey3(keyCode)
                }
                 else {
                    btAdapter.getProfileProxy(this,

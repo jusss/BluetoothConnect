@@ -1,0 +1,8 @@
+keycode is OS use it to map key
+scan code is physical keyboard, there're press and release two things, send to OS, 
+make is press, break is release, + 0x80, make code first position make it to 1 will be break code
+scan code A is 0x04,
+press code is 0x04,
+release code is 0x04 + 0x80
+
+send 0x0 will send all key up 

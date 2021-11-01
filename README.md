@@ -18,7 +18,7 @@ Use Android as A Bluetooth Keyboard, support OTG Keyboard too
 6. now it pop pair up dialog, pair it!
 
 # Switch Window 
- 'cause android capture Alt Tab, so, use Alt ` to switch window
+ 'cause android capture Alt Tab, so, use Alt Space to switch window
 
 
 -- pair and connect not same thing in archlinux, if you pair it, but it may not be connected, you have to connect by right click on it 'connect',
@@ -38,3 +38,14 @@ https://github.com/domi1294/BluetoothHidDemo <br/>
 https://github.com/AchimStuy/Kontroller <br/>
 https://www.usb.org/sites/default/files/documents/hut1_12v2.pdf<br/>
 https://elementalx.org/button-mapper/android-key-codes/ <br/>
+
+# Key code and Scan code
+
+keycode is OS use it to map key
+scan code is physical keyboard, there're press and release two things, send to OS, 
+make is press, break is release, + 0x80, make code first position make it to 1 will be break code
+scan code A is 0x04,
+press code is 0x04,
+release code is 0x04 + 0x80
+
+send 0x0 will send all key up 
