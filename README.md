@@ -24,7 +24,7 @@ Use Android as A Bluetooth Keyboard, support OTG Keyboard too
 -- pair and connect not same thing in archlinux, if you pair it, but it may not be connected, you have to connect by right click on it 'connect',
 -- on windows 10, in the settings, after pair, it will auto be connected,
 -- the important thing is run this app and then connect it, you can't connect it before this app run,
--- systemctl start lightdm, or systemctl start bluetooth; blueman-applet; blueman-manager
+-- neton, systemctl start lightdm, systemctl start bluetooth; blueman-applet; blueman-manager
 -- 1. pair android and archlinux
 -- 2. open this app choose archlinux device name
 -- 3. forget archlinux device name in android 
