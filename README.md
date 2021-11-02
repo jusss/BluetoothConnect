@@ -23,19 +23,6 @@ Use Android as A Bluetooth Keyboard, support OTG Keyboard too
 # Remap CapsLock to Left Ctrl
   by default, capslock is switched to left ctrl
 
-
--- pair and connect not same thing in archlinux, if you pair it, but it may not be connected, you have to connect by right click on it 'connect',<br/>
--- on windows 10, in the settings, after pair, it will auto be connected,<br/>
--- the important thing is run this app and then connect it, you can't connect it before this app run, <br/>
--- neton, systemctl start lightdm, systemctl start bluetooth; blueman-applet; blueman-manager <br/>
--- 1. pair android and archlinux <br/>
--- 2. open this app choose archlinux device name<br/>
--- 3. forget archlinux device name in android <br/>
--- 4. archlinux blueman-manager right click on android device name, choose 'connect'<br/>
--- 5. pair each other<br/>
--- 6. it works<br/>
-
-
 # Reference
 https://github.com/ginkage/wearmouse<br/>
 https://github.com/domi1294/BluetoothHidDemo <br/>
@@ -53,3 +40,17 @@ press code is 0x04,
 release code is 0x04 + 0x80
 
 send 0x0 will send all key up 
+
+
+# notes
+
+-- pair and connect not same thing in archlinux, if you pair it, but it may not be connected, you have to connect by right click on it 'connect',<br/>
+-- on windows 10, in the settings, after pair, it will auto be connected,<br/>
+-- the important thing is run this app and then connect it, you can't connect it before this app run, <br/>
+-- neton, systemctl start lightdm, systemctl start bluetooth; blueman-applet; blueman-manager <br/>
+-- 1. pair android and archlinux <br/>
+-- 2. open this app choose archlinux device name<br/>
+-- 3. forget archlinux device name in android <br/>
+-- 4. archlinux blueman-manager right click on android device name, choose 'connect'<br/>
+-- 5. pair each other<br/>
+-- 6. it works<br/>
