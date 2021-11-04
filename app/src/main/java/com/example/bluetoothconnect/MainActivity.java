@@ -14,7 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    String screenSize = "1280x720";
+    String screenSize = "system_keyboard";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,9 +34,16 @@ public class MainActivity extends AppCompatActivity {
                     ArrayList<String> name = new ArrayList<>();
                     name.add(device.getName());
                     name.add(screenSize);
-                    Intent intent = new Intent(getApplicationContext(), KeyboardActivity.class);
-                    intent.putExtra("name",name);
-                    startActivity(intent);
+                    if (screenSize != "system_keyboard"){
+                        Intent intent = new Intent(getApplicationContext(), KeyboardActivity.class);
+                        intent.putExtra("name",name);
+                        startActivity(intent);
+                    }
+                    else {
+                        Intent intent = new Intent(getApplicationContext(), OnScreenKeyboardActivity.class);
+                        intent.putExtra("name",name);
+                        startActivity(intent);
+                    }
                 }
             });
             ll.addView(buttons.get(buttons.size() - 1));
@@ -54,14 +61,14 @@ public class MainActivity extends AppCompatActivity {
         size3.setText("1280x720 large");
 
         CheckBox size5 = new CheckBox(this);
-        size5.setText("otg keyboard");
+        size5.setText("system keyboard");
 
         ls.addView(size1);
         ls.addView(size2);
         ls.addView(size3);
         ls.addView(size5);
 
-        size1.setChecked(true);
+        size5.setChecked(true);
 
         size1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
                 size2.setChecked(false);
                 size3.setChecked(false);
                 size5.setChecked(true);
-                screenSize = "otg_keyboard";
+                screenSize = "system_keyboard";
             }
         });
     }

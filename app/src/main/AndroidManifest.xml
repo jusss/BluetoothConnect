@@ -19,6 +19,9 @@
         <activity android:name=".KeyboardActivity"
             >
         </activity>
+        <activity android:name=".OnScreenKeyboardActivity"
+            >
+        </activity>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
