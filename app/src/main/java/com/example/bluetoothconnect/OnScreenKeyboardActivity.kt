@@ -6,7 +6,9 @@ import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
+import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
+import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 
@@ -26,6 +28,8 @@ class OnScreenKeyboardActivity : AppCompatActivity() {
     var isWindowPressed = false
     var isAltRepeat = false
     var latestSentTime = System.currentTimeMillis()
+    lateinit var imm: InputMethodManager
+    var paused = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,8 +71,14 @@ class OnScreenKeyboardActivity : AppCompatActivity() {
                 }
                 , BluetoothProfile.HID_DEVICE)
 
-        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0)
+//        imm.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT,0)
+
+
+        findViewById<Button>(R.id.btn).setOnClickListener {
+            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0)
+        }
     }
 
     fun sendAllKeyUp(){
@@ -200,29 +210,51 @@ class OnScreenKeyboardActivity : AppCompatActivity() {
         return true
     }
 
-    override fun onRestart() {
-                super.onRestart()
-                btAdapter.getProfileProxy(this,
-                        object : BluetoothProfile.ServiceListener{
-                    override fun onServiceDisconnected(profile: Int) {
-                        println("--- Disconnect, profile is $profile")
-                    }
-                    override fun onServiceConnected(profile: Int, proxy: BluetoothProfile?) {
-                        println("--- connected, profile is $profile")
-                        if (profile == BluetoothProfile.HID_DEVICE) {
-                            // get bthid
-                            bthid = proxy as BluetoothHidDevice
-                            println("--- got hid proxy object ")
-                            val btcallback = BluetoothCallback(this@OnScreenKeyboardActivity,bthid, btAdapter,TARGET_DEVICE_NAME)
-                            bthid.registerApp(sdpRecord, null, qosOut, {it.run()}, btcallback)
+    override fun onPause() {
+        super.onPause()
+//        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+//        imm.toggleSoftInput(InputMethodManager.HIDE_NOT_ALWAYS,0)
+        imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY,0)
+//        imm.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT,0)
+
+//        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
+//        imm.hideSoftInputFromWindow(currentFocus.windowToken,0)
+        paused = true
+        println("--- hide keyboard")
+    }
+
+    override fun onResume() {
+                super.onResume()
+                if (paused) {
+                    btAdapter.getProfileProxy(this,
+                            object : BluetoothProfile.ServiceListener {
+                                override fun onServiceDisconnected(profile: Int) {
+                                    println("--- Disconnect, profile is $profile")
+                                }
+
+                                override fun onServiceConnected(profile: Int, proxy: BluetoothProfile?) {
+                                    println("--- connected, profile is $profile")
+                                    if (profile == BluetoothProfile.HID_DEVICE) {
+                                        // get bthid
+                                        bthid = proxy as BluetoothHidDevice
+                                        println("--- got hid proxy object ")
+                                        val btcallback = BluetoothCallback(this@OnScreenKeyboardActivity, bthid, btAdapter, TARGET_DEVICE_NAME)
+                                        bthid.registerApp(sdpRecord, null, qosOut, { it.run() }, btcallback)
 //                            bthid.registerApp(
 //                                    Constants.SDP_RECORD, null, Constants.QOS_OUT, Executor { obj: Runnable -> obj.run() }, btcallback
 //                            )
-                        }
-                    }
+                                    }
+                                }
+                            }
+                            , BluetoothProfile.HID_DEVICE)
+
+//                    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+//                    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
+//                    println("--- on resume keyboard")
                 }
-                , BluetoothProfile.HID_DEVICE)
+                paused = false
     }
+
 
     private val sdpRecord by lazy {
         BluetoothHidDeviceAppSdpSettings(
