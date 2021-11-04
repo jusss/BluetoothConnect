@@ -243,6 +243,7 @@ class KeyboardActivity : AppCompatActivity() {
         val editTextView = findViewById<EditText>(R.id.edit_text)
         editTextView?.requestFocus()
 
+        // call system input method to input, use onKeyDown and onKeyUp in activity
         editTextView?.setOnKeyListener { v: View?, keyCode: Int, event: KeyEvent? ->
 
             // windows key is search key in android, but there is no keycode for window key or fn key by otg wired keyboard input
@@ -395,11 +396,12 @@ class KeyboardActivity : AppCompatActivity() {
 
     private val sdpRecord by lazy {
         BluetoothHidDeviceAppSdpSettings(
-            "Pixel HID1",
-            "Mobile BController",
-            "bla",
+            "Bluetooth HID Keyboard",
+            "Bluetooth HID Keyboard",
+            "Fixed Point",
             BluetoothHidDevice.SUBCLASS1_COMBO,
-                DescriptorCollection.MOUSE_KEYBOARD_COMBO
+//                DescriptorCollection.MOUSE_KEYBOARD_COMBO
+                        DescriptorCollection.KeyboardDescriptor
         )
     }
 

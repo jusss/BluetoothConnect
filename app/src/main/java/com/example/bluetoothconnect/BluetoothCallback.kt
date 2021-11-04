@@ -133,9 +133,9 @@ class BluetoothCallback(val context: Context, val btHid: BluetoothHidDevice, val
     }
 
     val featureReport = FeatureReport()
+    val keyboardReport2 = KeyboardReport2()
 
     override fun onSetReport(device: BluetoothDevice?, type: Byte, id: Byte, data: ByteArray?) {
-        Log.i("setfirst","setfirst")
         super.onSetReport(device, type, id, data)
         Log.i("setreport","this $device and $type and $id and $data")
 
@@ -145,25 +145,30 @@ class BluetoothCallback(val context: Context, val btHid: BluetoothHidDevice, val
     }
 
     override fun onGetReport(device: BluetoothDevice?, type: Byte, id: Byte, bufferSize: Int) {
-
-        Log.i("getbefore", "first")
         super.onGetReport(device, type, id, bufferSize)
 
         CoroutineScope(Dispatchers.Main).launch {
             Toast.makeText(context,"onGetReport", Toast.LENGTH_SHORT).show()
         }
 
-        Log.i("get", "second")
-        if (type == BluetoothHidDevice.REPORT_TYPE_FEATURE) {
-            featureReport.wheelResolutionMultiplier = true
-            featureReport.acPanResolutionMultiplier = true
-            Log.i("getbthid","$btHid")
+//        if (type == BluetoothHidDevice.REPORT_TYPE_FEATURE) {
+//            featureReport.wheelResolutionMultiplier = true
+//            featureReport.acPanResolutionMultiplier = true
+//            Log.i("getbthid","$btHid")
+//
+//            var wasrs=btHid?.replyReport(device, type, FeatureReport.ID, featureReport.bytes)
+//            Log.i("replysuccess flag ",wasrs.toString())
+//        }
 
-            var wasrs=btHid?.replyReport(device, type, FeatureReport.ID, featureReport.bytes)
-            Log.i("replysuccess flag ",wasrs.toString())
+        if (type == BluetoothHidDevice.REPORT_TYPE_INPUT){
+            btHid?.replyReport(device,type,id,keyboardReport2.bytes)
         }
 
     }
+
+
+
+
 
 
 }
