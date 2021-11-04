@@ -46,13 +46,24 @@ class BluetoothCallback(val context: Context, val btHid: BluetoothHidDevice, val
                     BluetoothProfile.STATE_DISCONNECTED -> "DISCONNECTED"
                     else -> state.toString()
                 }}")
-                if (state == BluetoothProfile.STATE_CONNECTED && it.name != TARGET_DEVICE_NAME) btHid.disconnect(it)
+//                if (state == BluetoothProfile.STATE_CONNECTED && it.name != TARGET_DEVICE_NAME) btHid.disconnect(it)
+            }
+
+//            btAdapter.bondedDevices.map {
+//                println("--- bonded device is ${it.name}")
+//                if (it.name == TARGET_DEVICE_NAME) {
+//                    if (!btHid.connectedDevices.contains(it)) btHid.connect(it)
+//                }
+//            }
+            btHid.connectedDevices.map {
+                println("--- connected device ${it.name} will be disconnected")
+                btHid.disconnect(it)
             }
 
             btAdapter.bondedDevices.map {
-                println("--- bonded device is ${it.name}")
                 if (it.name == TARGET_DEVICE_NAME) {
-                    if (!btHid.connectedDevices.contains(it)) btHid.connect(it)
+                    println("--- connect to target $TARGET_DEVICE_NAME")
+                    btHid.connect(it)
                 }
             }
 
