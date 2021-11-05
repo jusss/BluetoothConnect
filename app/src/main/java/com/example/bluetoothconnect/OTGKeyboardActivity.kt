@@ -13,7 +13,7 @@ import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 
 
-class OnScreenKeyboardActivity : AppCompatActivity() {
+class OTGKeyboardActivity : AppCompatActivity() {
     lateinit var bthid : BluetoothHidDevice
     val keyCode2KeyCode = KeyCode2KeyCode()
     val keyboardReport = KeyboardReport()
@@ -33,7 +33,7 @@ class OnScreenKeyboardActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_onscreenkeyboard)
+        setContentView(R.layout.activity_otgkeyboard)
 
         val intent = intent
         val name = intent.getSerializableExtra("name") as ArrayList<String>?
@@ -62,7 +62,7 @@ class OnScreenKeyboardActivity : AppCompatActivity() {
                         // get bthid
                         bthid = proxy as BluetoothHidDevice
                         println("--- got hid proxy object ")
-                        val btcallback = BluetoothCallback(this@OnScreenKeyboardActivity,bthid, btAdapter,TARGET_DEVICE_NAME)
+                        val btcallback = BluetoothCallback(this@OTGKeyboardActivity,bthid, btAdapter,TARGET_DEVICE_NAME)
                         bthid.registerApp(sdpRecord, null, qosOut, {it.run()}, btcallback)
 //                            bthid.registerApp(
 //                                    Constants.SDP_RECORD, null, Constants.QOS_OUT, Executor { obj: Runnable -> obj.run() }, btcallback
@@ -76,60 +76,9 @@ class OnScreenKeyboardActivity : AppCompatActivity() {
 //        imm.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT,0)
 
 
-        findViewById<Button>(R.id.keyboard).setOnClickListener {
-            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0)
-        }
-
-        findViewById<Button>(R.id.alt).setOnClickListener {
-//            isAltPressed = isAltPressed.not()
-//            if (isAltPressed){
-//                sendModifierKeyDown(KeyEvent.KEYCODE_ALT_LEFT)
-//            }
-//            else {
-////                sendKeyUp(KeyEvent.KEYCODE_ALT_LEFT)
-//                sendAllKeyUp()
-//            }
-
-            isAltPressed = isAltPressed.not()
-            if (!isAltPressed){
-//                sendKeyUp(KeyEvent.KEYCODE_ALT_LEFT)
-                sendAllKeyUp()
-            }
-        }
-
-        findViewById<Button>(R.id.ctrl).setOnClickListener {
-//            isCtrlPressed = isCtrlPressed.not()
-//            if (isCtrlPressed){
-//                sendModifierKeyDown(KeyEvent.KEYCODE_CTRL_LEFT)
-//            }
-//            else {
-//                sendAllKeyUp()
-//            }
-            isCtrlPressed = true
-        }
-
-        findViewById<Button>(R.id.shift).setOnClickListener {
-//            isShiftPressed = isShiftPressed.not()
-//            if (isShiftPressed){
-//                sendModifierKeyDown(KeyEvent.KEYCODE_SHIFT_LEFT)
-//            }
-//            else {
-//                sendAllKeyUp()
-//            }
-            isShiftPressed = true
-        }
-
         findViewById<Button>(R.id.window).setOnClickListener {
-//            isWindowPressed = isWindowPressed.not()
-//            if (isWindowPressed){
-//                sendModifierKeyDown(KeyEvent.KEYCODE_WINDOW)
-//            }
-//            else {
-//                sendAllKeyUp()
-//            }
             isWindowPressed = true
         }
-
     }
 
     fun sendAllKeyUp(){
@@ -175,7 +124,7 @@ class OnScreenKeyboardActivity : AppCompatActivity() {
         var key = 0
 
         // replace ALt Space to Alt Tab
-        if ((keyCode == KeyEvent.KEYCODE_SPACE || keyCode == KeyEvent.KEYCODE_TAB) && isAltPressed) {
+        if (keyCode == KeyEvent.KEYCODE_SPACE && isAltPressed){
             key = KeyboardReport2.KeyEventMap.get(KeyEvent.KEYCODE_TAB) ?: 0
         }
         else{
@@ -197,7 +146,6 @@ class OnScreenKeyboardActivity : AppCompatActivity() {
     override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
 
         if (keyCode == KeyEvent.KEYCODE_CAPS_LOCK) { isCapsLockPressed = false }
-        if (keyCode == KeyEvent.KEYCODE_WINDOW) { isWindowPressed = false }
         if (keyCode == KeyEvent.KEYCODE_ALT_LEFT || keyCode == KeyEvent.KEYCODE_ALT_RIGHT) { isAltPressed = false }
         if (keyCode == KeyEvent.KEYCODE_CTRL_LEFT || keyCode == KeyEvent.KEYCODE_CTRL_RIGHT) { isCtrlPressed = false }
         if (keyCode == KeyEvent.KEYCODE_SHIFT_LEFT || keyCode == KeyEvent.KEYCODE_SHIFT_RIGHT) {
@@ -209,27 +157,17 @@ class OnScreenKeyboardActivity : AppCompatActivity() {
         }
 
         // alt tab switch window is alt key down, tab key down, tab up, alt up
-        if ((keyCode == KeyEvent.KEYCODE_SPACE || keyCode == KeyEvent.KEYCODE_TAB) && isAltPressed) {
+        if (keyCode == KeyEvent.KEYCODE_SPACE && isAltPressed) {
             sendKeyUp(KeyEvent.KEYCODE_TAB)
 //            println(" send alt space $keyCode")
         }
         else {
 //            println(" send key up $keyCode")
-//            sendKeyUp(keyCode)
-
-
             sendAllKeyUp()
-//            if (isAltPressed) sendModifierKeyDown(KeyEvent.KEYCODE_ALT_LEFT)
-//            if (isCapsLockPressed) sendModifierKeyDown(KeyEvent.KEYCODE_CTRL_LEFT)
-//            if (isCtrlPressed) sendModifierKeyDown(KeyEvent.KEYCODE_CTRL_LEFT)
-//            if (isShiftPressed) sendModifierKeyDown(KeyEvent.KEYCODE_SHIFT_LEFT)
-//            if (isWindowPressed) sendModifierKeyDown(KeyEvent.KEYCODE_WINDOW)
-            // after win r, release win
+            if (isAltPressed) sendModifierKeyDown(KeyEvent.KEYCODE_ALT_LEFT)
+            if (isCapsLockPressed) sendModifierKeyDown(KeyEvent.KEYCODE_CTRL_LEFT)
+            if (isCtrlPressed) sendModifierKeyDown(KeyEvent.KEYCODE_CTRL_LEFT)
             isWindowPressed = false
-            isCtrlPressed = false
-            isShiftPressed = false
-            isCapsLockPressed = false
-            isAltPressed = false
         }
 
 //        return super.onKeyUp(keyCode, event)
@@ -243,12 +181,7 @@ class OnScreenKeyboardActivity : AppCompatActivity() {
             if (keyCode == KeyEvent.KEYCODE_CAPS_LOCK) {
                 isCapsLockPressed = true
                 sendModifierKeyDown(keyCode)
-//                if (!isCapsLockPressed) sendModifierKeyDown(keyCode)
-            }
-            if (keyCode == KeyEvent.KEYCODE_WINDOW) {
-                isWindowPressed = true
-                sendModifierKeyDown(keyCode)
-//                if (!isWindowPressed) sendModifierKeyDown(keyCode)
+                if (!isCapsLockPressed) sendModifierKeyDown(keyCode)
             }
             if (keyCode == KeyEvent.KEYCODE_ALT_LEFT || keyCode == KeyEvent.KEYCODE_ALT_RIGHT) {
                 isAltPressed = true
@@ -256,12 +189,12 @@ class OnScreenKeyboardActivity : AppCompatActivity() {
                 // alt key down
                 sendModifierKeyDown(keyCode)
                 // hold alt, only send one alt key down
-//                if (!isAltPressed) sendModifierKeyDown(keyCode)
+                if (!isAltPressed) sendModifierKeyDown(keyCode)
             }
             if (keyCode == KeyEvent.KEYCODE_CTRL_LEFT || keyCode == KeyEvent.KEYCODE_CTRL_RIGHT){
                 isCtrlPressed = true
                 sendModifierKeyDown(keyCode)
-//                if (!isCtrlPressed) sendModifierKeyDown(keyCode)
+                if (!isCtrlPressed) sendModifierKeyDown(keyCode)
             }
             if (keyCode == KeyEvent.KEYCODE_SHIFT_LEFT || keyCode == KeyEvent.KEYCODE_SHIFT_RIGHT){
                 // shift pressed and hold only send one shift key event when released for shift switch input method
@@ -269,7 +202,7 @@ class OnScreenKeyboardActivity : AppCompatActivity() {
                 isShiftPressedWithOthers = false
             }
 
-            if (!listOf<Int>(KeyEvent.KEYCODE_CAPS_LOCK, KeyEvent.KEYCODE_ALT_LEFT, KeyEvent.KEYCODE_ALT_RIGHT,KeyEvent.KEYCODE_WINDOW,
+            if (!listOf<Int>(KeyEvent.KEYCODE_CAPS_LOCK, KeyEvent.KEYCODE_ALT_LEFT, KeyEvent.KEYCODE_ALT_RIGHT,
                             KeyEvent.KEYCODE_CTRL_LEFT,KeyEvent.KEYCODE_CTRL_RIGHT,KeyEvent.KEYCODE_SHIFT_LEFT,KeyEvent.KEYCODE_SHIFT_RIGHT).contains(keyCode))
                 sendKeyDown(keyCode)
         }
@@ -306,7 +239,7 @@ class OnScreenKeyboardActivity : AppCompatActivity() {
                                         // get bthid
                                         bthid = proxy as BluetoothHidDevice
                                         println("--- got hid proxy object ")
-                                        val btcallback = BluetoothCallback(this@OnScreenKeyboardActivity, bthid, btAdapter, TARGET_DEVICE_NAME)
+                                        val btcallback = BluetoothCallback(this@OTGKeyboardActivity, bthid, btAdapter, TARGET_DEVICE_NAME)
                                         bthid.registerApp(sdpRecord, null, qosOut, { it.run() }, btcallback)
 //                            bthid.registerApp(
 //                                    Constants.SDP_RECORD, null, Constants.QOS_OUT, Executor { obj: Runnable -> obj.run() }, btcallback

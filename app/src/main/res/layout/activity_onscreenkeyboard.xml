@@ -3,12 +3,46 @@
     android:layout_width="match_parent" android:layout_height="match_parent">
 
     <Button
-        android:id="@+id/btn"
+        android:id="@+id/keyboard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Keyboard"
         android:focusable="false"
         android:textAllCaps="false"/>
 
+    <Button
+        android:id="@+id/alt"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:text="Alt"
+        android:layout_toRightOf="@+id/keyboard"
+        android:focusable="false"
+        android:textAllCaps="false"/>
 
+    <Button
+        android:id="@+id/ctrl"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:text="Ctrl"
+        android:layout_toRightOf="@+id/alt"
+        android:focusable="false"
+        android:textAllCaps="false"/>
+
+    <Button
+        android:id="@+id/shift"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:text="Shift"
+        android:layout_toRightOf="@+id/ctrl"
+        android:focusable="false"
+        android:textAllCaps="false"/>
+
+    <Button
+        android:id="@+id/window"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:text="Win"
+        android:layout_toRightOf="@+id/shift"
+        android:focusable="false"
+        android:textAllCaps="false"/>
 </RelativeLayout>
