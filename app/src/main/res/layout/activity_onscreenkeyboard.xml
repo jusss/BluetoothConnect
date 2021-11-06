@@ -45,4 +45,113 @@
         android:layout_toRightOf="@+id/shift"
         android:focusable="false"
         android:textAllCaps="false"/>
+
+<!--    <Button-->
+<!--        android:id="@+id/backspace"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Backspace"-->
+<!--        android:layout_alignParentRight="true"-->
+<!--        android:focusable="false"-->
+<!--        android:textAllCaps="false"/>-->
+
+<!--    <Button-->
+<!--        android:id="@+id/esc"-->
+<!--        android:layout_width="60dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Esc"-->
+<!--        android:layout_below="@+id/keyboard"-->
+<!--        android:focusable="false"-->
+<!--        android:textAllCaps="false"/>-->
+
+<!--    <Button-->
+<!--        android:id="@+id/tab"-->
+<!--        android:layout_width="60dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Tab"-->
+<!--        android:layout_toRightOf="@+id/esc"-->
+<!--        android:focusable="false"-->
+<!--        android:textAllCaps="false"/>-->
+
+<!--    <Button-->
+<!--        android:id="@+id/up"-->
+<!--        android:layout_width="60dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Up"-->
+<!--        android:layout_toRightOf="@+id/tab"-->
+<!--        android:focusable="false"-->
+<!--        android:textAllCaps="false"/>-->
+
+<!--    <Button-->
+<!--        android:id="@+id/up"-->
+<!--        android:layout_width="60dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Up"-->
+<!--        android:layout_toRightOf="@+id/tab"-->
+<!--        android:focusable="false"-->
+<!--        android:textAllCaps="false"/>-->
+
+<!--    <Button-->
+<!--        android:id="@+id/up"-->
+<!--        android:layout_width="60dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Up"-->
+<!--        android:layout_toRightOf="@+id/tab"-->
+<!--        android:focusable="false"-->
+<!--        android:textAllCaps="false"/>-->
+
+<!--    <Button-->
+<!--        android:id="@+id/down"-->
+<!--        android:layout_width="60dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Down"-->
+<!--        android:layout_toRightOf="@+id/up"-->
+<!--        android:focusable="false"-->
+<!--        android:textAllCaps="false"/>-->
+
+<!--    <Button-->
+<!--        android:id="@+id/left"-->
+<!--        android:layout_width="60dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Left"-->
+<!--        android:layout_toRightOf="@+id/down"-->
+<!--        android:focusable="false"-->
+<!--        android:textAllCaps="false"/>-->
+
+<!--    <Button-->
+<!--        android:id="@+id/right"-->
+<!--        android:layout_width="60dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Right"-->
+<!--        android:layout_toRightOf="@+id/left"-->
+<!--        android:focusable="false"-->
+<!--        android:textAllCaps="false"/>-->
+
+<!--    <Button-->
+<!--        android:id="@+id/slash"-->
+<!--        android:layout_width="60dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="/"-->
+<!--        android:layout_toRightOf="@+id/right"-->
+<!--        android:focusable="false"-->
+<!--        android:textAllCaps="false"/>-->
+
+<!--    <Button-->
+<!--        android:id="@+id/delete"-->
+<!--        android:layout_width="60dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Delete"-->
+<!--        android:layout_toRightOf="@+id/slash"-->
+<!--        android:focusable="false"-->
+<!--        android:textAllCaps="false"/>-->
+
+<!--    <Button-->
+<!--        android:id="@+id/question"-->
+<!--        android:layout_width="60dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="\?"-->
+<!--        android:layout_alignParentRight="true"-->
+<!--        android:focusable="false"-->
+<!--        android:textAllCaps="false"/>-->
+
 </RelativeLayout>

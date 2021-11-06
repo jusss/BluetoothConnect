@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_marginTop="0dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/line1"
+        android:layout_marginTop="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="56dp">
+
+    <Button
+        android:id="@+id/keyboard"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:text="Keyboard"
+        android:focusable="false"
+        android:textAllCaps="false"/>
+
+    <Button
+        android:id="@+id/alt"
+        android:layout_width="60dp"
+        android:layout_height="match_parent"
+        android:text="Alt"
+        android:layout_toRightOf="@+id/keyboard"
+        android:focusable="false"
+        android:textAllCaps="false"/>
+
+    <Button
+        android:id="@+id/ctrl"
+        android:layout_width="60dp"
+        android:layout_height="match_parent"
+        android:text="Ctrl"
+        android:layout_toRightOf="@+id/alt"
+        android:focusable="false"
+        android:textAllCaps="false"/>
+
+    <Button
+        android:id="@+id/shift"
+        android:layout_width="60dp"
+        android:layout_height="match_parent"
+        android:text="Shift"
+        android:layout_toRightOf="@+id/ctrl"
+        android:focusable="false"
+        android:textAllCaps="false"/>
+
+    <Button
+        android:id="@+id/window"
+        android:layout_width="60dp"
+        android:layout_height="match_parent"
+        android:text="Win"
+        android:layout_toRightOf="@+id/shift"
+        android:focusable="false"
+        android:textAllCaps="false"/>
+
+    <Button
+        android:id="@+id/backspace"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:text="Backspace"
+        android:layout_alignParentRight="true"
+        android:focusable="false"
+        android:textAllCaps="false"/>
+
+        <Button
+            android:id="@+id/delete"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Delete"
+            android:layout_toLeftOf="@+id/backspace"
+            android:focusable="false"
+            android:textAllCaps="false"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/line2"
+        android:layout_below="@+id/line1"
+        android:layout_width="match_parent"
+        android:layout_height="56dp">
+
+    <Button
+        android:id="@+id/esc"
+        android:layout_width="60dp"
+        android:layout_height="match_parent"
+        android:text="Esc"
+        android:focusable="false"
+        android:textAllCaps="false"/>
+
+    <Button
+        android:id="@+id/tab"
+        android:layout_width="60dp"
+        android:layout_height="match_parent"
+        android:text="Tab"
+        android:layout_toRightOf="@+id/esc"
+        android:focusable="false"
+        android:textAllCaps="false"/>
+
+    <Button
+        android:id="@+id/up"
+        android:layout_width="60dp"
+        android:layout_height="match_parent"
+        android:text="Up"
+        android:layout_toRightOf="@+id/tab"
+        android:focusable="false"
+        android:textAllCaps="false"/>
+
+    <Button
+        android:id="@+id/down"
+        android:layout_width="60dp"
+        android:layout_height="match_parent"
+        android:text="Down"
+        android:layout_toRightOf="@+id/up"
+        android:focusable="false"
+        android:textAllCaps="false"/>
+
+    <Button
+        android:id="@+id/left"
+        android:layout_width="60dp"
+        android:layout_height="match_parent"
+        android:text="Left"
+        android:layout_toRightOf="@+id/down"
+        android:focusable="false"
+        android:textAllCaps="false"/>
+
+    <Button
+        android:id="@+id/right"
+        android:layout_width="60dp"
+        android:layout_height="match_parent"
+        android:text="Right"
+        android:layout_toRightOf="@+id/left"
+        android:focusable="false"
+        android:textAllCaps="false"/>
+
+    <Button
+        android:id="@+id/question"
+        android:layout_width="60dp"
+        android:layout_height="match_parent"
+        android:text="\?"
+        android:layout_alignParentRight="true"
+        android:focusable="false"
+        android:textAllCaps="false"/>
+
+        <Button
+            android:id="@+id/slash"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:text="/"
+            android:layout_toLeftOf="@+id/question"
+            android:focusable="false"
+            android:textAllCaps="false"/>
+
+    </RelativeLayout>
+</RelativeLayout>

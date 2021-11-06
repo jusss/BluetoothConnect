@@ -130,6 +130,83 @@ class OnScreenKeyboardActivity : AppCompatActivity() {
             isWindowPressed = true
         }
 
+        findViewById<Button>(R.id.backspace)?.setOnClickListener {
+            sendKeyDown(KeyEvent.KEYCODE_DEL)
+            sendKeyUp(KeyEvent.KEYCODE_DEL)
+        }
+        findViewById<Button>(R.id.esc)?.setOnClickListener {
+            sendKeyDown(KeyEvent.KEYCODE_ESCAPE)
+            sendKeyUp(KeyEvent.KEYCODE_ESCAPE)
+        }
+        findViewById<Button>(R.id.tab)?.setOnClickListener {
+            sendKeyDown(KeyEvent.KEYCODE_TAB)
+            sendKeyUp(KeyEvent.KEYCODE_TAB)
+        }
+        findViewById<Button>(R.id.up)?.setOnClickListener {
+            sendKeyDown(KeyEvent.KEYCODE_DPAD_UP)
+            sendAllKeyUp()
+            isWindowPressed = false
+            isCtrlPressed = false
+            isShiftPressed = false
+            isCapsLockPressed = false
+            isAltPressed = false
+        }
+        findViewById<Button>(R.id.down)?.setOnClickListener {
+            sendKeyDown(KeyEvent.KEYCODE_DPAD_DOWN)
+            sendAllKeyUp()
+            isWindowPressed = false
+            isCtrlPressed = false
+            isShiftPressed = false
+            isCapsLockPressed = false
+            isAltPressed = false
+        }
+        findViewById<Button>(R.id.left)?.setOnClickListener {
+            sendKeyDown(KeyEvent.KEYCODE_DPAD_LEFT)
+            sendAllKeyUp()
+            isWindowPressed = false
+            isCtrlPressed = false
+            isShiftPressed = false
+            isCapsLockPressed = false
+            isAltPressed = false
+        }
+        findViewById<Button>(R.id.right)?.setOnClickListener {
+            sendKeyDown(KeyEvent.KEYCODE_DPAD_RIGHT)
+            sendAllKeyUp()
+            isWindowPressed = false
+            isCtrlPressed = false
+            isShiftPressed = false
+            isCapsLockPressed = false
+            isAltPressed = false
+        }
+        findViewById<Button>(R.id.slash)?.setOnClickListener {
+            sendKeyDown(KeyEvent.KEYCODE_SLASH)
+            sendAllKeyUp()
+            isWindowPressed = false
+            isCtrlPressed = false
+            isShiftPressed = false
+            isCapsLockPressed = false
+            isAltPressed = false
+        }
+        findViewById<Button>(R.id.delete)?.setOnClickListener {
+            sendKeyDown(KeyEvent.KEYCODE_FORWARD_DEL)
+            sendAllKeyUp()
+            isWindowPressed = false
+            isCtrlPressed = false
+            isShiftPressed = false
+            isCapsLockPressed = false
+            isAltPressed = false
+        }
+        findViewById<Button>(R.id.question)?.setOnClickListener {
+            isShiftPressed = true
+            sendKeyDown(KeyEvent.KEYCODE_SLASH)
+            sendAllKeyUp()
+            isWindowPressed = false
+            isCtrlPressed = false
+            isShiftPressed = false
+            isCapsLockPressed = false
+            isAltPressed = false
+        }
+
     }
 
     fun sendAllKeyUp(){
