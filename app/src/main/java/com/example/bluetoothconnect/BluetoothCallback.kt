@@ -13,17 +13,17 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
-class BluetoothCallback(val context: Context, val btHid: BluetoothHidDevice, val btAdapter: BluetoothAdapter, val TARGET_DEVICE_NAME: String): BluetoothHidDevice.Callback(){
+class BluetoothCallback(val context: Context, val bthid: BluetoothHidDevice, val btAdapter: BluetoothAdapter, val TARGET_DEVICE_NAME: String): BluetoothHidDevice.Callback(){
     override fun onAppStatusChanged(pluggedDevice: BluetoothDevice?, registered: Boolean) {
         super.onAppStatusChanged(pluggedDevice, registered)
         if (pluggedDevice != null) { println(" --- plugged device is   ${pluggedDevice.name}") }
         if (registered) {
-            var pairedDevices = btHid.getDevicesMatchingConnectionStates(intArrayOf(BluetoothProfile.STATE_CONNECTING, BluetoothProfile.STATE_CONNECTED, BluetoothProfile.STATE_DISCONNECTED, BluetoothProfile.STATE_DISCONNECTING))
+            var pairedDevices = bthid.getDevicesMatchingConnectionStates(intArrayOf(BluetoothProfile.STATE_CONNECTING, BluetoothProfile.STATE_CONNECTED, BluetoothProfile.STATE_DISCONNECTED, BluetoothProfile.STATE_DISCONNECTING))
             // paired device may only contain one, it is not like bonded device
             println( "--- paired devices are : ${pairedDevices.map { it.name }}")
 
 //            if (pairedDevices.isNotEmpty()){
-//                val state  = btHid.getConnectionState(pairedDevices?.get(0))
+//                val state  = bthid.getConnectionState(pairedDevices?.get(0))
 //                println("--- first connection is ${pairedDevices.get(0).name}, state is ${when(state) {
 //                    BluetoothProfile.STATE_CONNECTING -> "CONNECTING"
 //                    BluetoothProfile.STATE_CONNECTED -> "CONNECTED"
@@ -33,12 +33,12 @@ class BluetoothCallback(val context: Context, val btHid: BluetoothHidDevice, val
 //                }}")
 //
 //                if (state == BluetoothProfile.STATE_CONNECTED){
-//                    btHid.disconnect(pairedDevices.get(0))
+//                    bthid.disconnect(pairedDevices.get(0))
 //                }
 //            }
 
             pairedDevices.map {
-                val state = btHid.getConnectionState(it)
+                val state = bthid.getConnectionState(it)
                 println("--- paired device ${it.name} is ${when(state) {
                     BluetoothProfile.STATE_CONNECTING -> "CONNECTING"
                     BluetoothProfile.STATE_CONNECTED -> "CONNECTED"
@@ -46,43 +46,43 @@ class BluetoothCallback(val context: Context, val btHid: BluetoothHidDevice, val
                     BluetoothProfile.STATE_DISCONNECTED -> "DISCONNECTED"
                     else -> state.toString()
                 }}")
-//                if (state == BluetoothProfile.STATE_CONNECTED && it.name != TARGET_DEVICE_NAME) btHid.disconnect(it)
+//                if (state == BluetoothProfile.STATE_CONNECTED && it.name != TARGET_DEVICE_NAME) bthid.disconnect(it)
             }
 
 //            btAdapter.bondedDevices.map {
 //                println("--- bonded device is ${it.name}")
 //                if (it.name == TARGET_DEVICE_NAME) {
-//                    if (!btHid.connectedDevices.contains(it)) btHid.connect(it)
+//                    if (!bthid.connectedDevices.contains(it)) btHid.connect(it)
 //                }
 //            }
-            btHid.connectedDevices.map {
+            bthid.connectedDevices.map {
                 println("--- connected device ${it.name} will be disconnected")
-                btHid.disconnect(it)
+                bthid.disconnect(it)
             }
 
             btAdapter.bondedDevices.map {
                 if (it.name == TARGET_DEVICE_NAME) {
                     println("--- connect to target $TARGET_DEVICE_NAME")
-                    btHid.connect(it)
+                    bthid.connect(it)
                 }
             }
 
 
 
-//            if (btHid.getConnectionState(pluggedDevice) == BluetoothProfile.STATE_DISCONNECTED && pluggedDevice != null) {
+//            if (bthid.getConnectionState(pluggedDevice) == BluetoothProfile.STATE_DISCONNECTED && pluggedDevice != null) {
 //                println("--- connect plugged device ${pluggedDevice.name}")
 //
 //
 //
-//                btHid.connect(pluggedDevice)
+//                bthid.connect(pluggedDevice)
 //
 //
 //            } else if (pairedDevices.isNotEmpty()) {
-//                if (btHid.getConnectionState(pairedDevices?.get(0)) == BluetoothProfile.STATE_DISCONNECTED) {
+//                if (bthid.getConnectionState(pairedDevices?.get(0)) == BluetoothProfile.STATE_DISCONNECTED) {
 //                    println("--- the latest paired device ${pairedDevices.get(0).name} is disconnected! reconnecting...")
 //
 //
-//                    btHid.connect(pairedDevices?.get(0))
+//                    bthid.connect(pairedDevices?.get(0))
 //
 //
 //
@@ -117,20 +117,20 @@ class BluetoothCallback(val context: Context, val btHid: BluetoothHidDevice, val
 
             ConnectedDevice.device = device
 
-//            if (btHid != null && device != null) {
+//            if (bthid != null && device != null) {
 //
 //                keyboardReport.key1=6.toByte()
-//                btHid.sendReport(device,KeyboardReport2.ID,keyboardReport.bytes)
+//                bthid.sendReport(device,KeyboardReport2.ID,keyboardReport.bytes)
 //                keyboardReport.bytes.fill(0)
-//                if (!btHid.sendReport(device, KeyboardReport2.ID, keyboardReport.bytes)) {
+//                if (!bthid.sendReport(device, KeyboardReport2.ID, keyboardReport.bytes)) {
 //                    Log.e(" ", "Report wasn't sent")
 //                }
 //
 //
 //                keyboardReport.key1=4.toByte()
-//                btHid.sendReport(device,KeyboardReport2.ID,keyboardReport.bytes)
+//                bthid.sendReport(device,KeyboardReport2.ID,keyboardReport.bytes)
 //                keyboardReport.bytes.fill(0)
-//                if (!btHid.sendReport(device, KeyboardReport2.ID, keyboardReport.bytes)) {
+//                if (!bthid.sendReport(device, KeyboardReport2.ID, keyboardReport.bytes)) {
 //                    Log.e(" ", "Report wasn't sent")
 //                }
 //
@@ -138,7 +138,7 @@ class BluetoothCallback(val context: Context, val btHid: BluetoothHidDevice, val
         }
 
 //        if (state == BluetoothProfile.STATE_DISCONNECTED){
-//            btHid.unregisterApp()
+//            bthid.unregisterApp()
 //            ConnectedDevice.device = null
 //        }
     }
@@ -165,14 +165,14 @@ class BluetoothCallback(val context: Context, val btHid: BluetoothHidDevice, val
 //        if (type == BluetoothHidDevice.REPORT_TYPE_FEATURE) {
 //            featureReport.wheelResolutionMultiplier = true
 //            featureReport.acPanResolutionMultiplier = true
-//            Log.i("getbthid","$btHid")
+//            Log.i("getbthid","$bthid")
 //
-//            var wasrs=btHid?.replyReport(device, type, FeatureReport.ID, featureReport.bytes)
+//            var wasrs=bthid?.replyReport(device, type, FeatureReport.ID, featureReport.bytes)
 //            Log.i("replysuccess flag ",wasrs.toString())
 //        }
 
         if (type == BluetoothHidDevice.REPORT_TYPE_INPUT){
-            btHid?.replyReport(device,type,id,keyboardReport2.bytes)
+            bthid?.replyReport(device,type,id,keyboardReport2.bytes)
         }
 
     }

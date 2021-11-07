@@ -2,19 +2,15 @@ package com.example.bluetoothconnect
 
 import android.bluetooth.*
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
+import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
-import android.widget.LinearLayout
+import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 
 class OTGKeyboardActivity : AppCompatActivity() {
@@ -43,35 +39,6 @@ class OTGKeyboardActivity : AppCompatActivity() {
         val name = intent.getSerializableExtra("name") as ArrayList<String>?
         TARGET_DEVICE_NAME = name!![0]
         val screenSize = name[1]
-        btAdapter = BluetoothAdapter.getDefaultAdapter()
-        val ll = findViewById<LinearLayout>(R.id.choose_target)
-        val buttons = ArrayList<Button>()
-
-        btAdapter.bondedDevices.map {btd ->
-            buttons.add(Button(this))
-            buttons.get(buttons.size - 1).setText(btd.name)
-            buttons.get(buttons.size - 1).setAllCaps(false)
-            buttons.get(buttons.size - 1).setFocusable(false)
-
-            buttons.get(buttons.size - 1).setOnClickListener {
-
-                bthid.connectedDevices.map {
-                    println("--- connected device ${it.name} will be disconnected")
-                    bthid.disconnect(it)
-                }
-
-                CoroutineScope(Dispatchers.IO).launch {
-                    delay(600)
-//                    if (bthid.connectedDevices.isEmpty()){
-                        println("--- connect to target ${btd.name}")
-                        bthid.connect(btd)
-//                    }
-                }
-
-                TARGET_DEVICE_NAME = btd.name
-            }
-            ll.addView(buttons.get(buttons.size - 1))
-        }
 
         // use BluetoothProfile.ServiceListener.onServiceConneted to get BluetoothHidDevice proxy object, no matter if bluetooth is connected or not
         //BluetoothHidDevice.Callback can listen bluetooth connection state change, pass it to BluetoothHidDevice.registerApp
@@ -79,6 +46,8 @@ class OTGKeyboardActivity : AppCompatActivity() {
         // get BluetoothHidDevice from BluetoothProfile.ServiceListener, get BluetoothDevice from registerApp
         // send message need BluetoothHidDevice and BluetoothDevice with sendReport
         // registerApp contain sdp_record, there's keyboard report id in sdp_record's last parameter descriptor
+
+        btAdapter = BluetoothAdapter.getDefaultAdapter()
 
         btAdapter.getProfileProxy(this,
                 object : BluetoothProfile.ServiceListener{
@@ -109,10 +78,6 @@ class OTGKeyboardActivity : AppCompatActivity() {
 
         findViewById<Button>(R.id.window).setOnClickListener {
             isWindowPressed = true
-        }
-
-        findViewById<Button>(R.id.keyboard).setOnClickListener {
-            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0)
         }
     }
 
