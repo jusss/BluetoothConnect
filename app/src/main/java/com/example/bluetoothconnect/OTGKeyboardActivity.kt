@@ -30,6 +30,7 @@ class OTGKeyboardActivity : AppCompatActivity() {
     var isShiftPressed = false
     var isShiftPressedWithOthers = false
     var isWindowPressed = false
+    var isWindowPressedWithOthers = false
     var isAltRepeat = false
     var latestSentTime = System.currentTimeMillis()
     lateinit var imm: InputMethodManager
@@ -153,7 +154,10 @@ class OTGKeyboardActivity : AppCompatActivity() {
         }
         if (isCtrlPressed) keyboardReport2.leftControl = true
         if (isAltPressed) keyboardReport2.leftAlt = true
-        if (isWindowPressed) keyboardReport2.leftGui = true
+        if (isWindowPressed) {
+            keyboardReport2.leftGui = true
+            isWindowPressedWithOthers = true
+        }
         if (isCapsLockPressed) keyboardReport2.leftControl = true
 
         var key = 0
@@ -191,6 +195,14 @@ class OTGKeyboardActivity : AppCompatActivity() {
             isShiftPressed = false
         }
 
+        if (keyCode == KeyEvent.KEYCODE_WINDOW){
+            if (!isWindowPressedWithOthers){
+                sendModifierKeyDown(KeyEvent.KEYCODE_WINDOW)
+                sendKeyUp(KeyEvent.KEYCODE_WINDOW)
+            }
+            isWindowPressed = false
+        }
+
         // alt tab switch window is alt key down, tab key down, tab up, alt up
         if (keyCode == KeyEvent.KEYCODE_SPACE && isAltPressed) {
             sendKeyUp(KeyEvent.KEYCODE_TAB)
@@ -212,7 +224,7 @@ class OTGKeyboardActivity : AppCompatActivity() {
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
 
         if (bthid.connectedDevices != null){
-//                   println("--- keycode is $keyCode")
+                   println("--- keycode is $keyCode")
             if (keyCode == KeyEvent.KEYCODE_CAPS_LOCK) {
                 isCapsLockPressed = true
                 sendModifierKeyDown(keyCode)
@@ -237,7 +249,12 @@ class OTGKeyboardActivity : AppCompatActivity() {
                 isShiftPressedWithOthers = false
             }
 
-            if (!listOf<Int>(KeyEvent.KEYCODE_CAPS_LOCK, KeyEvent.KEYCODE_ALT_LEFT, KeyEvent.KEYCODE_ALT_RIGHT,
+            if (keyCode == KeyEvent.KEYCODE_WINDOW){
+                isWindowPressed = true
+                isWindowPressedWithOthers = false
+            }
+
+            if (!listOf<Int>(KeyEvent.KEYCODE_CAPS_LOCK, KeyEvent.KEYCODE_ALT_LEFT, KeyEvent.KEYCODE_ALT_RIGHT,KeyEvent.KEYCODE_WINDOW,
                             KeyEvent.KEYCODE_CTRL_LEFT,KeyEvent.KEYCODE_CTRL_RIGHT,KeyEvent.KEYCODE_SHIFT_LEFT,KeyEvent.KEYCODE_SHIFT_RIGHT).contains(keyCode))
                 sendKeyDown(keyCode)
         }
