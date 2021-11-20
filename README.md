@@ -34,9 +34,12 @@ run `adb root` then `adb shell` u will get root privilege <br/>
 before 17.1, you can get su file via https://download.lineageos.org/extras <br/>
 and just flash it via recovery, then in adb shell run `su` <br/>
 
-adb root <br/>
-adb remount # to remount /system as read-write, not readonly <br/>
-nano /system/usr/keylayout/Generic.kl <br/>
+connect android to PC via usb cable, swipe down notification bar,<br/>
+click android system, change 'Charging the device via USB' to 'File Transfer'<br/>
+`adb root` <br/>
+`adb remount` remount /system as read-write, not readonly <br/>
+`adb shell` <br/>
+`nano /system/usr/keylayout/Generic.kl` <br/>
 change 125 to WINDOW <br/>
 
 125 META_LEFT is window/super key in the physical keyboard <br/>
