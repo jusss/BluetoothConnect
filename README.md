@@ -23,6 +23,27 @@ Use Android as A Bluetooth Keyboard, support OTG Keyboard too
 # Remap CapsLock to Left Ctrl
   by default, capslock is switched to left ctrl
 
+# about Window Key
+
+since android 10, lineageos 17.1 won't release su <br/>
+but it can get root with adb <br/>
+
+enable 'rooted debugging' in developer options <br/>
+run `adb root` then `adb shell` u will get root privilege <br/>
+
+before 17.1, you can get su file via https://download.lineageos.org/extras <br/>
+and just flash it via recovery, then in adb shell run `su` <br/>
+
+adb root <br/>
+adb remount # to remount /system as read-write, not readonly <br/>
+nano /system/usr/keylayout/Generic.kl <br/>
+change 125 to WINDOW <br/>
+
+125 META_LEFT is window/super key in the physical keyboard <br/>
+
+https://blog.csdn.net/u012587637/article/details/115517908 <br/>
+
+
 # Reference
 https://github.com/ginkage/wearmouse<br/>
 https://github.com/domi1294/BluetoothHidDemo <br/>
