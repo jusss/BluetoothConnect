@@ -13,6 +13,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 
+import static android.content.res.Configuration.KEYBOARD_QWERTY;
+
 public class MainActivity extends AppCompatActivity {
     String screenSize = "onscreen_keyboard";
 
@@ -83,7 +85,14 @@ public class MainActivity extends AppCompatActivity {
         ls.addView(size5);
         ls.addView(size6);
 
-        size5.setChecked(true);
+        if (getResources().getConfiguration().keyboard == KEYBOARD_QWERTY){
+            size6.setChecked(true);
+            screenSize = "otg_keyboard";
+        }
+        else {
+            size5.setChecked(true);
+            screenSize = "onscreen_keyboard";
+        }
 
 //        size1.setOnClickListener(new View.OnClickListener() {
 //            @Override
