@@ -57,6 +57,27 @@ public class MainActivity extends AppCompatActivity {
                         intent.putExtra("name",name);
                         startActivity(intent);
                     }
+
+
+                    if (screenSize == "1280x720"){
+                        Intent intent = new Intent(getApplicationContext(), CustomScreenKeyboardActivity.class);
+                        intent.putExtra("name",name);
+                        startActivity(intent);
+                    }
+
+
+                    if (screenSize == "1280x720_large"){
+                        Intent intent = new Intent(getApplicationContext(), CustomScreenKeyboardActivity.class);
+                        intent.putExtra("name",name);
+                        startActivity(intent);
+                    }
+
+                    if (screenSize == "2340x1080"){
+                        Intent intent = new Intent(getApplicationContext(), CustomScreenKeyboardActivity.class);
+                        intent.putExtra("name",name);
+                        startActivity(intent);
+                    }
+
                 }
             });
             ll.addView(buttons.get(buttons.size() - 1));
@@ -64,14 +85,14 @@ public class MainActivity extends AppCompatActivity {
 
         LinearLayout ls = (LinearLayout)findViewById(R.id.choose_size);
 
-//        CheckBox size1 = new CheckBox(this);
-//        size1.setText("1280x720");
-//
-//        CheckBox size2 = new CheckBox(this);
-//        size2.setText("2340x1080");
-//
-//        CheckBox size3 = new CheckBox(this);
-//        size3.setText("1280x720 large");
+        CheckBox size1 = new CheckBox(this);
+        size1.setText("1280x720");
+
+        CheckBox size2 = new CheckBox(this);
+        size2.setText("2340x1080");
+
+        CheckBox size3 = new CheckBox(this);
+        size3.setText("1280x720 large");
 
         CheckBox size5 = new CheckBox(this);
         size5.setText("onscreen keyboard");
@@ -79,9 +100,9 @@ public class MainActivity extends AppCompatActivity {
         CheckBox size6 = new CheckBox(this);
         size6.setText("otg keyboard");
 
-//        ls.addView(size1);
-//        ls.addView(size2);
-//        ls.addView(size3);
+        ls.addView(size1);
+        ls.addView(size2);
+        ls.addView(size3);
         ls.addView(size5);
         ls.addView(size6);
 
@@ -90,50 +111,52 @@ public class MainActivity extends AppCompatActivity {
             screenSize = "otg_keyboard";
         }
         else {
-            size5.setChecked(true);
-            screenSize = "onscreen_keyboard";
+//            size5.setChecked(true);
+//            screenSize = "onscreen_keyboard";
+            size1.setChecked(true);
+            screenSize = "1280x720";
         }
 
-//        size1.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                size1.setChecked(true);
-//                size2.setChecked(false);
-//                size3.setChecked(false);
-//                size5.setChecked(false);
-//                screenSize = "1280x720";
-//            }
-//        });
-//
-//
-//        size2.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                size1.setChecked(false);
-//                size2.setChecked(true);
-//                size3.setChecked(false);
-//                size5.setChecked(false);
-//                screenSize = "2340x1080";
-//            }
-//        });
-//
-//        size3.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                size1.setChecked(false);
-//                size2.setChecked(false);
-//                size3.setChecked(true);
-//                size5.setChecked(false);
-//                screenSize = "1280x720_large";
-//            }
-//        });
+        size1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                size1.setChecked(true);
+                size2.setChecked(false);
+                size3.setChecked(false);
+                size5.setChecked(false);
+                screenSize = "1280x720";
+            }
+        });
+
+
+        size2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                size1.setChecked(false);
+                size2.setChecked(true);
+                size3.setChecked(false);
+                size5.setChecked(false);
+                screenSize = "2340x1080";
+            }
+        });
+
+        size3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                size1.setChecked(false);
+                size2.setChecked(false);
+                size3.setChecked(true);
+                size5.setChecked(false);
+                screenSize = "1280x720_large";
+            }
+        });
 
         size5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                size1.setChecked(false);
-//                size2.setChecked(false);
-//                size3.setChecked(false);
+                size1.setChecked(false);
+                size2.setChecked(false);
+                size3.setChecked(false);
                 size5.setChecked(true);
                 size6.setChecked(false);
                 screenSize = "onscreen_keyboard";
@@ -143,9 +166,9 @@ public class MainActivity extends AppCompatActivity {
         size6.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                size1.setChecked(false);
-//                size2.setChecked(false);
-//                size3.setChecked(false);
+                size1.setChecked(false);
+                size2.setChecked(false);
+                size3.setChecked(false);
                 size5.setChecked(false);
                 size6.setChecked(true);
                 screenSize = "otg_keyboard";

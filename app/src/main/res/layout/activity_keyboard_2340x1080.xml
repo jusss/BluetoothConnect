@@ -1,0 +1,619 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:padding="1dp"
+android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/line7"
+        android:layout_above="@+id/line6"
+        android:layout_width="match_parent"
+        android:layout_height="60dp">
+
+        <Button
+            android:id="@+id/tab"
+            android:layout_width="44dp"
+            android:layout_height="match_parent"
+            android:text="Tab"
+
+            android:textAllCaps="false"
+            />
+
+        <Button
+            android:id="@+id/esc"
+            android:layout_width="44dp"
+            android:layout_height="match_parent"
+            android:text="Esc"
+
+            android:layout_toRightOf="@+id/tab"
+            android:textAllCaps="false"
+            />
+        <Button
+            android:id="@+id/window"
+            android:layout_width="44dp"
+            android:layout_height="match_parent"
+            android:text="Win"
+                        android:layout_toRightOf="@+id/esc"
+            android:textAllCaps="false"
+            />
+
+        <Button
+            android:id="@+id/alt"
+            android:layout_width="44dp"
+            android:layout_height="match_parent"
+            android:text="Alt"
+                        android:layout_toRightOf="@+id/window"
+            android:textAllCaps="false"
+            />
+
+        <Button
+            android:id="@+id/left"
+            android:layout_width="44dp"
+            android:layout_height="match_parent"
+            android:text="Left"
+
+            android:layout_toRightOf="@+id/alt"
+            android:textAllCaps="false"
+            />
+
+        <Button
+            android:id="@+id/down"
+            android:layout_width="44dp"
+            android:layout_height="match_parent"
+            android:text="Down"
+
+            android:layout_toRightOf="@+id/left"
+            android:textAllCaps="false"
+            />
+        <Button
+            android:id="@+id/right"
+            android:layout_width="44dp"
+            android:layout_height="match_parent"
+            android:text="Right"
+
+            android:layout_toRightOf="@+id/down"
+            android:textAllCaps="false"
+            />
+        <Button
+            android:id="@+id/up"
+            android:layout_width="44dp"
+            android:layout_height="match_parent"
+            android:text="Up"
+
+            android:layout_toRightOf="@+id/right"
+            android:textAllCaps="false"
+            />
+
+        <Button
+            android:id="@+id/question"
+            android:layout_width="44dp"
+            android:layout_height="match_parent"
+            android:text="\?"
+
+            android:layout_toRightOf="@+id/up"
+            android:textAllCaps="false"
+            />
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/line6"
+        android:layout_above="@+id/line5"
+        android:layout_width="match_parent"
+        android:layout_height="60dp">
+
+        <Button
+            android:id="@+id/backquote"
+            android:layout_width="44dp"
+            android:layout_height="match_parent"
+            android:text="`   ~"
+
+            android:textAllCaps="false"
+            />
+
+        <Button
+            android:id="@+id/char_slash"
+            android:layout_width="44dp"
+            android:layout_height="match_parent"
+            android:text="/   ?"
+
+            android:layout_toRightOf="@+id/backquote"
+            android:textAllCaps="false"
+            />
+
+        <Button
+            android:id="@+id/semicolon"
+            android:layout_width="44dp"
+            android:layout_height="match_parent"
+            android:text=";   :"
+
+            android:layout_toRightOf="@+id/char_slash"
+            android:textAllCaps="false"
+            />
+        <Button
+            android:id="@+id/single_quote"
+            android:layout_width="44dp"
+            android:layout_height="match_parent"
+            android:text="'"
+
+            android:layout_toRightOf="@+id/semicolon"
+            android:textAllCaps="false"
+            />
+        <Button
+            android:id="@+id/left_square"
+            android:layout_width="44dp"
+            android:layout_height="match_parent"
+            android:text="[   {"
+
+            android:layout_toRightOf="@+id/single_quote"
+            android:textAllCaps="false"
+            />
+        <Button
+            android:id="@+id/right_square"
+            android:layout_width="44dp"
+            android:layout_height="match_parent"
+            android:text="]   }"
+
+            android:layout_toRightOf="@+id/left_square"
+            android:textAllCaps="false"
+            />
+        <Button
+            android:id="@+id/back_slach"
+            android:layout_width="44dp"
+            android:layout_height="match_parent"
+            android:text="\\   |"
+
+            android:layout_toRightOf="@+id/right_square"
+            android:textAllCaps="false"
+            />
+        <Button
+            android:id="@+id/hyphen"
+            android:layout_width="44dp"
+            android:layout_height="match_parent"
+            android:text="-   _"
+
+            android:layout_toRightOf="@+id/back_slach"
+            android:textAllCaps="false"
+            />
+        <Button
+            android:id="@+id/equal"
+            android:layout_width="44dp"
+            android:layout_height="match_parent"
+            android:text="=   +"
+
+            android:layout_toRightOf="@+id/hyphen"
+            android:textAllCaps="false"
+            />
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/line5"
+        android:layout_above="@+id/line4"
+        android:layout_width="match_parent"
+        android:layout_height="60dp">
+
+        <Button
+            android:id="@+id/char_1"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:text="1   !"
+
+            android:textAllCaps="false"
+            />
+        <Button
+            android:id="@+id/char_2"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:text="2  @"
+
+            android:layout_toRightOf="@+id/char_1"
+            android:textAllCaps="false"
+            />
+        <Button
+            android:id="@+id/char_3"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:text="3   #"
+
+            android:layout_toRightOf="@+id/char_2"
+            android:textAllCaps="false"
+            />
+        <Button
+            android:id="@+id/char_4"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:text="4   $"
+
+            android:layout_toRightOf="@+id/char_3"
+            android:textAllCaps="false"
+            />
+        <Button
+            android:id="@+id/char_5"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:text="5   %"
+
+            android:layout_toRightOf="@+id/char_4"
+            android:textAllCaps="false"
+            />
+        <Button
+            android:id="@+id/char_6"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:text="6   ^"
+
+            android:layout_toRightOf="@+id/char_5"
+            android:textAllCaps="false"
+            />
+        <Button
+            android:id="@+id/char_7"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:text="7   &amp;"
+
+            android:layout_toRightOf="@+id/char_6"
+            android:textAllCaps="false"
+            />
+        <Button
+            android:id="@+id/char_8"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:text="8   *"
+
+            android:layout_toRightOf="@+id/char_7"
+            android:textAllCaps="false"
+            />
+        <Button
+            android:id="@+id/char_9"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:text="9   ("
+
+            android:layout_toRightOf="@+id/char_8"
+            android:textAllCaps="false"
+            />
+
+        <Button
+            android:id="@+id/char_0"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:text="0   )"
+
+            android:layout_toRightOf="@+id/char_9"
+            android:textAllCaps="false"
+            />
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/line4"
+        android:layout_above="@+id/line3"
+        android:layout_width="match_parent"
+        android:layout_height="60dp">
+
+        <Button
+            android:id="@+id/char_q"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:text="q"
+            android:layout_alignParentLeft="true"
+
+            android:textAllCaps="false"
+            />
+        <Button
+            android:id="@+id/char_w"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:text="w"
+
+            android:layout_toRightOf="@+id/char_q"
+            android:textAllCaps="false"
+            />
+        <Button
+            android:id="@+id/char_e"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:text="e"
+
+            android:layout_toRightOf="@+id/char_w"
+            android:textAllCaps="false"
+            />
+        <Button
+            android:id="@+id/char_r"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:text="r"
+
+            android:layout_toRightOf="@+id/char_e"
+            android:textAllCaps="false"
+            />
+        <Button
+            android:id="@+id/char_t"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:text="t"
+
+            android:layout_toRightOf="@+id/char_r"
+            android:textAllCaps="false"
+            />
+        <Button
+            android:id="@+id/char_y"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:text="y"
+
+            android:layout_toRightOf="@+id/char_t"
+            android:textAllCaps="false"
+            />
+        <Button
+            android:id="@+id/char_u"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:text="u"
+
+            android:layout_toRightOf="@+id/char_y"
+            android:textAllCaps="false"
+            />
+        <Button
+            android:id="@+id/char_i"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:text="i"
+
+            android:layout_toRightOf="@+id/char_u"
+            android:textAllCaps="false"
+            />
+        <Button
+            android:id="@+id/char_o"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:text="o"
+
+            android:layout_toRightOf="@+id/char_i"
+            android:textAllCaps="false"
+            />
+        <Button
+            android:id="@+id/char_p"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:text="p"
+
+            android:layout_toRightOf="@+id/char_o"
+            android:textAllCaps="false"
+            />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/line3"
+        android:layout_above="@+id/line2"
+        android:layout_width="match_parent"
+        android:layout_height="60dp">
+
+
+        <Button
+            android:id="@+id/char_a"
+            android:layout_width="44dp"
+            android:layout_height="match_parent"
+            android:text="a"
+
+            android:textAllCaps="false"
+            />
+        <Button
+            android:id="@+id/char_s"
+            android:layout_width="44dp"
+            android:layout_height="match_parent"
+            android:text="s"
+
+            android:layout_toRightOf="@+id/char_a"
+            android:textAllCaps="false"
+            />
+        <Button
+            android:id="@+id/char_d"
+            android:layout_width="44dp"
+            android:layout_height="match_parent"
+            android:text="d"
+
+            android:layout_toRightOf="@+id/char_s"
+            android:textAllCaps="false"
+            />
+        <Button
+            android:id="@+id/char_f"
+            android:layout_width="44dp"
+            android:layout_height="match_parent"
+            android:text="f"
+
+            android:layout_toRightOf="@+id/char_d"
+            android:textAllCaps="false"
+            />
+        <Button
+            android:id="@+id/char_g"
+            android:layout_width="44dp"
+            android:layout_height="match_parent"
+            android:text="g"
+
+            android:layout_toRightOf="@+id/char_f"
+            android:textAllCaps="false"
+            />
+        <Button
+            android:id="@+id/char_h"
+            android:layout_width="44dp"
+            android:layout_height="match_parent"
+            android:text="h"
+
+            android:layout_toRightOf="@+id/char_g"
+            android:textAllCaps="false"
+            />
+        <Button
+            android:id="@+id/char_j"
+            android:layout_width="44dp"
+            android:layout_height="match_parent"
+            android:text="j"
+
+            android:layout_toRightOf="@+id/char_h"
+            android:textAllCaps="false"
+            />
+        <Button
+            android:id="@+id/char_k"
+            android:layout_width="44dp"
+            android:layout_height="match_parent"
+            android:text="k"
+
+            android:layout_toRightOf="@+id/char_j"
+            android:textAllCaps="false"
+            />
+        <Button
+            android:id="@+id/char_l"
+            android:layout_width="44dp"
+            android:layout_height="match_parent"
+            android:text="l"
+
+            android:layout_toRightOf="@+id/char_k"
+            android:textAllCaps="false"
+            />
+
+
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_above="@+id/line1"
+        android:id="@+id/line2">
+
+        <Button
+            android:id="@+id/shift"
+            android:layout_width="44dp"
+            android:layout_height="match_parent"
+            android:text="Shift"
+                        android:textAllCaps="false"
+            />
+
+        <Button
+            android:id="@+id/char_z"
+            android:layout_width="44dp"
+            android:layout_height="match_parent"
+            android:text="z"
+
+            android:layout_toRightOf="@+id/shift"
+            android:textAllCaps="false"
+            />
+        <Button
+            android:id="@+id/char_x"
+            android:layout_width="44dp"
+            android:layout_height="match_parent"
+            android:text="x"
+
+            android:layout_toRightOf="@+id/char_z"
+            android:textAllCaps="false"
+            />
+        <Button
+            android:id="@+id/char_c"
+            android:layout_width="44dp"
+            android:layout_height="match_parent"
+            android:text="c"
+
+            android:layout_toRightOf="@+id/char_x"
+            android:textAllCaps="false"
+            />
+        <Button
+            android:id="@+id/char_v"
+            android:layout_width="44dp"
+            android:layout_height="match_parent"
+            android:text="v"
+
+            android:layout_toRightOf="@+id/char_c"
+            android:textAllCaps="false"
+            />
+        <Button
+            android:id="@+id/char_b"
+            android:layout_width="44dp"
+            android:layout_height="match_parent"
+            android:text="b"
+
+            android:layout_toRightOf="@+id/char_v"
+            android:textAllCaps="false"
+            />
+        <Button
+            android:id="@+id/char_n"
+            android:layout_width="44dp"
+            android:layout_height="match_parent"
+            android:text="n"
+
+            android:layout_toRightOf="@+id/char_b"
+            android:textAllCaps="false"
+            />
+        <Button
+            android:id="@+id/char_m"
+            android:layout_width="44dp"
+            android:layout_height="match_parent"
+            android:text="m"
+
+            android:layout_toRightOf="@+id/char_n"
+            android:textAllCaps="false"
+            />
+
+        <Button
+            android:id="@+id/back"
+            android:layout_width="44dp"
+            android:layout_height="match_parent"
+            android:text="Back"
+            android:layout_toRightOf="@+id/char_m"
+            android:textAllCaps="false"
+            />
+    </RelativeLayout>
+
+    <RelativeLayout
+            android:id="@+id/line1"
+            android:layout_alignParentBottom ="true"
+            android:layout_width="match_parent"
+            android:layout_height="60dp">
+
+            <Button
+                android:id="@+id/ctrl"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:text="Ctrl"
+                                android:textAllCaps="false"
+                />
+
+        <Button
+            android:id="@+id/char_comma"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:text=",   &lt;"
+
+            android:layout_toRightOf="@+id/ctrl"
+            android:textAllCaps="false"
+            />
+
+        <Button
+            android:id="@+id/space"
+                android:layout_width="180dp"
+                android:layout_height="match_parent"
+                android:text="Space"
+
+                android:layout_toRightOf="@+id/char_comma"
+                android:textAllCaps="false"
+                />
+
+
+        <Button
+            android:id="@+id/char_period"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:text=".   &gt;"
+
+            android:layout_toRightOf="@+id/space"
+            android:textAllCaps="false"
+            />
+
+
+            <Button
+                android:id="@+id/enter"
+                android:layout_width="66dp"
+                android:layout_height="match_parent"
+                android:text="Enter"
+                                android:textAllCaps="false"
+                android:layout_alignParentRight="true"
+                />
+   </RelativeLayout>
+
+</RelativeLayout>

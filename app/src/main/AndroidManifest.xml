@@ -22,6 +22,9 @@
         <activity android:name=".OnScreenKeyboardActivity"
             >
         </activity>
+        <activity android:name=".CustomScreenKeyboardActivity"
+            >
+        </activity>
         <activity android:name=".OTGKeyboardActivity"
             >
         </activity>
