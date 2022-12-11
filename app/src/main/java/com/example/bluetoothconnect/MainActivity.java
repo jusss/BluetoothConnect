@@ -124,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
                 size2.setChecked(false);
                 size3.setChecked(false);
                 size5.setChecked(false);
+                size6.setChecked(false);
                 screenSize = "1280x720";
             }
         });
@@ -136,6 +137,7 @@ public class MainActivity extends AppCompatActivity {
                 size2.setChecked(true);
                 size3.setChecked(false);
                 size5.setChecked(false);
+                size6.setChecked(false);
                 screenSize = "2340x1080";
             }
         });
@@ -147,6 +149,7 @@ public class MainActivity extends AppCompatActivity {
                 size2.setChecked(false);
                 size3.setChecked(true);
                 size5.setChecked(false);
+                size6.setChecked(false);
                 screenSize = "1280x720_large";
             }
         });

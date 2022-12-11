@@ -136,7 +136,14 @@ class CustomScreenKeyboardActivity : AppCompatActivity() {
 //            else {
 //                sendAllKeyUp()
 //            }
-            isWindowPressed = true
+
+//            isWindowPressed = true
+
+            isWindowPressed = isWindowPressed.not()
+            if (!isWindowPressed){
+//                sendKeyUp(KeyEvent.KEYCODE_ALT_LEFT)
+                sendAllKeyUp()
+            }
         }
 
         findViewById<Button>(R.id.question)?.setOnClickListener {
@@ -181,7 +188,11 @@ class CustomScreenKeyboardActivity : AppCompatActivity() {
             R.id.right to KeyEvent.KEYCODE_DPAD_RIGHT,
             R.id.down to KeyEvent.KEYCODE_DPAD_DOWN,
             R.id.up to KeyEvent.KEYCODE_DPAD_UP,
-            R.id.delete to KeyEvent.KEYCODE_FORWARD_DEL
+            R.id.delete to KeyEvent.KEYCODE_FORWARD_DEL,
+            R.id.space to KeyEvent.KEYCODE_SPACE,
+            R.id.enter to KeyEvent.KEYCODE_ENTER,
+            R.id.back to KeyEvent.KEYCODE_DEL,
+            R.id.esc to KeyEvent.KEYCODE_ESCAPE
         )
 
 
@@ -199,11 +210,7 @@ class CustomScreenKeyboardActivity : AppCompatActivity() {
         }
 
         val specialKey = mutableMapOf<Int, Int>(
-            R.id.space to KeyEvent.KEYCODE_SPACE,
-            R.id.enter to KeyEvent.KEYCODE_ENTER,
-            R.id.tab to KeyEvent.KEYCODE_TAB,
-            R.id.back to KeyEvent.KEYCODE_DEL,
-            R.id.esc to KeyEvent.KEYCODE_ESCAPE
+            R.id.tab to KeyEvent.KEYCODE_TAB
         )
 
         for ((k, v) in specialKey){
@@ -294,10 +301,10 @@ class CustomScreenKeyboardActivity : AppCompatActivity() {
                 ConnectedDevice.device,KeyboardReport2.ID,keyboardReport2.bytes
         )
 
-        keyboardReport2.leftShift = false
-        keyboardReport2.leftControl = false
+//        keyboardReport2.leftShift = false
+//        keyboardReport2.leftControl = false
 //            keyboardReport2.leftAlt = false
-        keyboardReport2.leftGui = false
+//        keyboardReport2.leftGui = false
     }
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
@@ -315,10 +322,13 @@ class CustomScreenKeyboardActivity : AppCompatActivity() {
         }
 
         // alt tab switch window is alt key down, tab key down, tab up, alt up
-        if ((keyCode == KeyEvent.KEYCODE_SPACE || keyCode == KeyEvent.KEYCODE_TAB) && isAltPressed) {
+        if (((keyCode == KeyEvent.KEYCODE_SPACE || keyCode == KeyEvent.KEYCODE_TAB) && isAltPressed) || ((keyCode == KeyEvent.KEYCODE_TAB) && isWindowPressed)) {
             sendKeyUp(KeyEvent.KEYCODE_TAB)
 //            println(" send alt space $keyCode")
         }
+//        if (isWindowPressed || isCtrlPressed || isShiftPressed || isCapsLockPressed || isAltPressed){
+//            sendKeyUp(keyCode)
+//        }
         else {
 //            println(" send key up $keyCode")
 //            sendKeyUp(keyCode)
@@ -337,6 +347,7 @@ class CustomScreenKeyboardActivity : AppCompatActivity() {
             isCapsLockPressed = false
             isAltPressed = false
         }
+
 
 //        return super.onKeyUp(keyCode, event)
         return true
