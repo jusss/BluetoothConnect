@@ -104,13 +104,21 @@ class BluetoothCallback(val context: Context, val bthid: BluetoothHidDevice, val
 
 
         CoroutineScope(Dispatchers.Main).launch {
-        Toast.makeText(context,"${device?.name} is ${when(state) {
-            BluetoothProfile.STATE_CONNECTING -> "CONNECTING"
-            BluetoothProfile.STATE_CONNECTED -> "CONNECTED"
-            BluetoothProfile.STATE_DISCONNECTING -> "DISCONNECTING"
-            BluetoothProfile.STATE_DISCONNECTED -> "DISCONNECTED"
-            else -> state.toString()
-        }}", Toast.LENGTH_SHORT).show()
+
+
+//        Toast.makeText(context,"${device?.name} is ${when(state) {
+//            BluetoothProfile.STATE_CONNECTING -> "CONNECTING"
+//            BluetoothProfile.STATE_CONNECTED -> "CONNECTED"
+//            BluetoothProfile.STATE_DISCONNECTING -> "DISCONNECTING"
+//            BluetoothProfile.STATE_DISCONNECTED -> "DISCONNECTED"
+//            else -> state.toString()
+//        }}", Toast.LENGTH_SHORT).show()
+
+
+            if (state == BluetoothProfile.STATE_CONNECTED) {
+                Toast.makeText(context,"${device?.name} is Connected", Toast.LENGTH_SHORT).show()
+            }
+
         }
 
         if (state == BluetoothProfile.STATE_CONNECTED){
