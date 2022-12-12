@@ -176,10 +176,10 @@ class OTGKeyboardActivity : AppCompatActivity() {
                 ConnectedDevice.device,KeyboardReport2.ID,keyboardReport2.bytes
         )
 
-        keyboardReport2.leftShift = false
-        keyboardReport2.leftControl = false
+//        keyboardReport2.leftShift = false
+//        keyboardReport2.leftControl = false
 //            keyboardReport2.leftAlt = false
-        keyboardReport2.leftGui = false
+//        keyboardReport2.leftGui = false
     }
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
@@ -204,7 +204,9 @@ class OTGKeyboardActivity : AppCompatActivity() {
         }
 
         // alt tab switch window is alt key down, tab key down, tab up, alt up
-        if (keyCode == KeyEvent.KEYCODE_SPACE && isAltPressed) {
+
+        if (((keyCode == KeyEvent.KEYCODE_SPACE || keyCode == KeyEvent.KEYCODE_TAB) && isAltPressed) || ((keyCode == KeyEvent.KEYCODE_TAB) && isWindowPressed)) {
+//        if (keyCode == KeyEvent.KEYCODE_SPACE && isAltPressed) {
             sendKeyUp(KeyEvent.KEYCODE_TAB)
 //            println(" send alt space $keyCode")
         }
