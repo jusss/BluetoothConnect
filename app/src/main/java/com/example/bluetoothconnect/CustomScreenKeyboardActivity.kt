@@ -46,6 +46,7 @@ class CustomScreenKeyboardActivity : AppCompatActivity() {
         if (screenSize == "1280x720") setContentView(R.layout.activity_keyboard_1280x720)
         if (screenSize == "2340x1080") setContentView(R.layout.activity_keyboard_2340x1080)
         if (screenSize == "1280x720_large") setContentView(R.layout.activity_keyboard_1280x720_large)
+        if (screenSize == "custom_keyboard") setContentView(R.layout.activity_custom_keyboard)
 
 
 
