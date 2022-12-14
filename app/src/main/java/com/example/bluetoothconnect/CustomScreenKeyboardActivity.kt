@@ -390,6 +390,9 @@ class CustomScreenKeyboardActivity : AppCompatActivity() {
             if (!listOf<Int>(KeyEvent.KEYCODE_CAPS_LOCK, KeyEvent.KEYCODE_ALT_LEFT, KeyEvent.KEYCODE_ALT_RIGHT,KeyEvent.KEYCODE_WINDOW,
                             KeyEvent.KEYCODE_CTRL_LEFT,KeyEvent.KEYCODE_CTRL_RIGHT,KeyEvent.KEYCODE_SHIFT_LEFT,KeyEvent.KEYCODE_SHIFT_RIGHT).contains(keyCode))
                 sendKeyDown(keyCode)
+//                avoid continuous backspace
+                if (keyCode == KeyEvent.KEYCODE_DEL) sendKeyUp(keyCode)
+
         }
 
 //        return super.onKeyDown(keyCode, event)

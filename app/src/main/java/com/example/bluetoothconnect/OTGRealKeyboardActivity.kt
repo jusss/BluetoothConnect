@@ -197,14 +197,17 @@ class OTGRealKeyboardActivity : AppCompatActivity() {
             when (keyCode){
                 KeyEvent.KEYCODE_SHIFT_LEFT -> isShiftPressed = 0
                 KeyEvent.KEYCODE_SHIFT_RIGHT -> isShiftPressed = 0
-                KeyEvent.KEYCODE_ALT_LEFT -> {println("alt left is up"); sendAllKeyUp()}
-                KeyEvent.KEYCODE_ALT_RIGHT -> {println("alt right is up"); sendAllKeyUp()}
-
+                KeyEvent.KEYCODE_ALT_LEFT -> {println("alt left is up"); isAltPressed=0;sendAllKeyUp()}
+                KeyEvent.KEYCODE_ALT_RIGHT -> {println("alt right is up"); isAltPressed=0;sendAllKeyUp()}
+//                KeyEvent.KEYCODE_ALT_LEFT -> sendAllKeyUp()
+//                KeyEvent.KEYCODE_ALT_RIGHT -> sendAllKeyUp()
+//                else -> sendAllKeyUp()
             }
         }
         else{
             when (keyCode){
                 KeyEvent.KEYCODE_TAB -> sendKeyUp(keyCode)
+                KeyEvent.KEYCODE_SPACE -> {if (isAltPressed == 0) sendKeyUp(keyCode) else sendKeyUp(KeyEvent.KEYCODE_TAB)}
                 else -> {
                         sendAllKeyUp()
                         when (isShiftPressed) {
@@ -224,17 +227,25 @@ class OTGRealKeyboardActivity : AppCompatActivity() {
                             KeyEvent.KEYCODE_CTRL_LEFT,KeyEvent.KEYCODE_CTRL_RIGHT,KeyEvent.KEYCODE_SHIFT_LEFT,
                             KeyEvent.KEYCODE_SHIFT_RIGHT).contains(keyCode)) {
                 sendModifierKeyDown(keyCode)
-                println(keyboardReport2.bytes[0])
+//                println(keyboardReport2.bytes[0])
+//                shift is 2, ctrl is 1, window is 8, and alt is 4
                 when (keyCode){
                     KeyEvent.KEYCODE_SHIFT_LEFT -> isShiftPressed = 1
                     KeyEvent.KEYCODE_SHIFT_RIGHT -> isShiftPressed = 2
-                    KeyEvent.KEYCODE_ALT_LEFT -> println("alt left is down")
-                    KeyEvent.KEYCODE_ALT_RIGHT -> println("alt right is down")
+//                    for alt space to send alt tab
+                    KeyEvent.KEYCODE_ALT_LEFT -> {println("alt left is down"); isAltPressed =1}
+                    KeyEvent.KEYCODE_ALT_RIGHT -> {println("alt right is down"); isAltPressed =2 }
                 }
             }
             else{
-                sendKeyDown(keyCode)
-                if (keyCode == KeyEvent.KEYCODE_DEL) sendKeyUp(keyCode)
+                if ((keyCode == KeyEvent.KEYCODE_SPACE) && (isAltPressed != 0)) {
+                    sendKeyDown(KeyEvent.KEYCODE_TAB)
+                }
+                else {
+                    sendKeyDown(keyCode)
+                    if (keyCode == KeyEvent.KEYCODE_DEL) sendKeyUp(keyCode)
+//                sendKeyUp(keyCode) this will delete anything when press y in Notes on iPadOS
+                }
             }
         }
         return true

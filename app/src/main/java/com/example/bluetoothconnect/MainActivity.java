@@ -126,8 +126,10 @@ public class MainActivity extends AppCompatActivity {
         ls.addView(size9);
 
         if (getResources().getConfiguration().keyboard == KEYBOARD_QWERTY){
-            size6.setChecked(true);
-            screenSize = "otg_keyboard";
+//            size6.setChecked(true);
+//            screenSize = "otg_keyboard";
+            size9.setChecked(true);
+            screenSize = "otg_real_keyboard";
         }
         else {
 //            size5.setChecked(true);
