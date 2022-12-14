@@ -84,26 +84,26 @@ inline class KeyboardReport2 (
         get() = bytes[2]
         set(value) { bytes[2] = value }
 
-//    var key2: Byte
-//        get() = bytes[3]
-//        set(value) { bytes[3] = value }
-//
-//
-//    var key3: Byte
-//        get() = bytes[4]
-//        set(value) { bytes[4] = value }
-//
-//    var key4: Byte
-//        get() = bytes[5]
-//        set(value) { bytes[5] = value }
-//
-//    var key5: Byte
-//        get() = bytes[6]
-//        set(value) { bytes[6] = value }
-//
-//    var key6: Byte
-//        get() = bytes[7]
-//        set(value) { bytes[7] = value }
+    var key2: Byte
+        get() = bytes[3]
+        set(value) { bytes[3] = value }
+
+
+    var key3: Byte
+        get() = bytes[4]
+        set(value) { bytes[4] = value }
+
+    var key4: Byte
+        get() = bytes[5]
+        set(value) { bytes[5] = value }
+
+    var key5: Byte
+        get() = bytes[6]
+        set(value) { bytes[6] = value }
+
+    var key6: Byte
+        get() = bytes[7]
+        set(value) { bytes[7] = value }
 
     fun reset() = bytes.fill(0)
 
@@ -289,6 +289,8 @@ inline class KeyboardReport2 (
             KeyEvent.KEYCODE_COMMA to 54,
             KeyEvent.KEYCODE_PERIOD to 55,
             KeyEvent.KEYCODE_SLASH to 56,
+            KeyEvent.KEYCODE_CAPS_LOCK to 57,
+            KeyEvent.KEYCODE_SYSRQ to 70,
 
             KeyEvent.KEYCODE_SCROLL_LOCK to 71,
             KeyEvent.KEYCODE_INSERT to 73,
@@ -306,7 +308,11 @@ inline class KeyboardReport2 (
 
             KeyEvent.KEYCODE_AT to 31,
             KeyEvent.KEYCODE_POUND to 32,
-            KeyEvent.KEYCODE_STAR to 37
+            KeyEvent.KEYCODE_STAR to 37,
+            KeyEvent.KEYCODE_MENU to 118,
+            KeyEvent.KEYCODE_BREAK to 72
+//                KeyEvent.KEYCODE_ALT_LEFT to 226
+
 
 
 

@@ -20,8 +20,17 @@
             android:id="@+id/window"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Win Key"
+            android:text="Win"
             android:layout_alignParentRight="true"
+            android:focusable="false"
+            android:textAllCaps="false"/>
+
+        <Button
+            android:id="@+id/tab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="tab"
+            android:layout_toLeftOf="@+id/window"
             android:focusable="false"
             android:textAllCaps="false"/>
 
