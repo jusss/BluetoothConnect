@@ -34,6 +34,15 @@
             android:focusable="false"
             android:textAllCaps="false"/>
 
+        <Button
+            android:id="@+id/switch_caps"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="switch CapsLock"
+            android:layout_toLeftOf="@+id/tab"
+            android:focusable="false"
+            android:textAllCaps="false"/>
+
     </RelativeLayout>
 
     <LinearLayout

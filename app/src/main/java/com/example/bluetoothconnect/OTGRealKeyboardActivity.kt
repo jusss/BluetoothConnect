@@ -22,9 +22,10 @@ class OTGRealKeyboardActivity : AppCompatActivity() {
     val keyboardReport2 = KeyboardReport2()
     lateinit var btAdapter: BluetoothAdapter
     lateinit var TARGET_DEVICE_NAME: String
+    var switchCapsLock = false
     var isCapsLockPressed = false
     var isAltPressed = 0
-    var isCtrlPressed = false
+    var isCtrlPressed = 0
     var isShiftPressed = 0
     var isShiftPressedWithOthers = false
     var isWindowPressed = false
@@ -120,6 +121,10 @@ class OTGRealKeyboardActivity : AppCompatActivity() {
             sendKeyUp(KeyEvent.KEYCODE_TAB)
         }
 
+        findViewById<Button>(R.id.switch_caps).setOnClickListener {
+            switchCapsLock = !switchCapsLock
+        }
+
         findViewById<Button>(R.id.keyboard).setOnClickListener {
             imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0)
         }
@@ -134,119 +139,96 @@ class OTGRealKeyboardActivity : AppCompatActivity() {
     }
 
     fun sendKeyUp(keyCode: Int){
-        var key = KeyboardReport2.KeyEventMap.get(keyCode) ?: 0
-        // scan code is press code, press code + 0x80 will be release code
-        key = key + 0x80
-        keyboardReport2.key1=key.toByte()
-        bthid.sendReport(
-                ConnectedDevice.device,KeyboardReport2.ID,keyboardReport2.bytes
-        )
-        keyboardReport2.key1=0.toByte()
+        var key1 : Int? = 0
+        when (keyCode) {
+            KeyEvent.KEYCODE_ALT_LEFT -> {keyboardReport2.leftAlt = false; isAltPressed = 0}
+            KeyEvent.KEYCODE_ALT_RIGHT -> {keyboardReport2.rightAlt = false; isAltPressed = 0}
+            KeyEvent.KEYCODE_CTRL_LEFT -> {keyboardReport2.leftControl = false; isCtrlPressed = 0}
+            KeyEvent.KEYCODE_CTRL_RIGHT -> {keyboardReport2.rightControl = false; isCtrlPressed = 0}
+            KeyEvent.KEYCODE_SHIFT_LEFT -> {keyboardReport2.leftShift = false; isShiftPressed = 0}
+            KeyEvent.KEYCODE_SHIFT_RIGHT -> {keyboardReport2.rightShift = false; isShiftPressed = 0}
+            KeyEvent.KEYCODE_WINDOW -> {keyboardReport2.leftGui = false; isWindowPressed = false}
+            KeyEvent.KEYCODE_CAPS_LOCK -> {if (switchCapsLock) {keyboardReport2.leftControl = false; isCtrlPressed = 0} else key1 = KeyboardReport2.KeyEventMap.get(keyCode)}
+            else -> key1 = KeyboardReport2.KeyEventMap.get(keyCode)
+        }
+
+        if (key1 != null){
+
+//            zero
+//            keyboardReport2.key1=(key1 + 0x80).toByte()
+//            bthid.sendReport(ConnectedDevice.device,KeyboardReport2.ID,keyboardReport2.bytes)
+
+//          one
+            if (keyCode == KeyEvent.KEYCODE_TAB
+                    || keyCode == KeyEvent.KEYCODE_SPACE
+                    || keyCode == KeyEvent.KEYCODE_SHIFT_LEFT
+                    || keyCode == KeyEvent.KEYCODE_SHIFT_RIGHT)
+                {   if (isAltPressed != 0 && keyCode == KeyEvent.KEYCODE_SPACE){  key1 = KeyboardReport2.KeyEventMap.get(KeyEvent.KEYCODE_TAB) ?: 0 } // alt space send alt tab
+                    keyboardReport2.key1 = (key1 + 0x80).toByte()
+                }
+            else {
+                keyboardReport2.reset()
+            }
+            bthid.sendReport(ConnectedDevice.device,KeyboardReport2.ID,keyboardReport2.bytes)
+
+
+//            for holding modifier keys
+            when (isShiftPressed)    {
+                1 -> keyboardReport2.leftShift = true
+                2 -> keyboardReport2.rightShift = true
+            }
+
+            when (isAltPressed)    {
+                1 -> keyboardReport2.leftAlt = true
+                2 -> keyboardReport2.rightAlt = true
+            }
+
+            when (isCtrlPressed)    {
+                1 -> keyboardReport2.leftControl = true
+                2 -> keyboardReport2.rightControl = true
+            }
+            if (isWindowPressed) keyboardReport2.leftGui = true
+
+            }
     }
 
     fun sendKeyDown(keyCode: Int){
-        val key = KeyboardReport2.KeyEventMap.get(keyCode) ?: 0
-        keyboardReport2.key1=key.toByte()
-        bthid.sendReport(
-                ConnectedDevice.device,KeyboardReport2.ID,keyboardReport2.bytes
-        )
-    }
-
-    fun sendModifierKeyDown(keyCode:Int) {
+        var key1 : Int? = 0
         when (keyCode) {
-            KeyEvent.KEYCODE_ALT_LEFT -> keyboardReport2.leftAlt = true
-            KeyEvent.KEYCODE_ALT_RIGHT -> keyboardReport2.rightAlt = true
-            KeyEvent.KEYCODE_CTRL_LEFT -> keyboardReport2.leftControl = true
-            KeyEvent.KEYCODE_CTRL_RIGHT -> keyboardReport2.rightControl = true
-            KeyEvent.KEYCODE_SHIFT_LEFT -> keyboardReport2.leftShift = true
-            KeyEvent.KEYCODE_SHIFT_RIGHT -> keyboardReport2.rightShift = true
-            KeyEvent.KEYCODE_WINDOW -> keyboardReport2.leftGui = true
-            KeyEvent.KEYCODE_CAPS_LOCK -> keyboardReport2.leftControl = true
-            else -> println("invalid modifier")
+            KeyEvent.KEYCODE_ALT_LEFT -> {keyboardReport2.leftAlt = true; isAltPressed = 1}
+            KeyEvent.KEYCODE_ALT_RIGHT -> {keyboardReport2.rightAlt = true; isAltPressed = 2}
+            KeyEvent.KEYCODE_CTRL_LEFT -> {keyboardReport2.leftControl = true; isCtrlPressed = 1}
+            KeyEvent.KEYCODE_CTRL_RIGHT -> {keyboardReport2.rightControl = true; isCtrlPressed = 2}
+            KeyEvent.KEYCODE_SHIFT_LEFT -> {keyboardReport2.leftShift = true; isShiftPressed = 1}
+            KeyEvent.KEYCODE_SHIFT_RIGHT -> {keyboardReport2.rightShift = true; isShiftPressed = 2}
+            KeyEvent.KEYCODE_WINDOW -> {keyboardReport2.leftGui = true; isWindowPressed = true}
+            KeyEvent.KEYCODE_CAPS_LOCK -> { if (switchCapsLock) {keyboardReport2.leftControl = true; isCtrlPressed = 1} else key1 = KeyboardReport2.KeyEventMap.get(keyCode)}
+            else -> key1 = KeyboardReport2.KeyEventMap.get(keyCode)
         }
-        keyboardReport2.key1 = 0.toByte()
-        bthid.sendReport(
-                        ConnectedDevice.device, KeyboardReport2.ID, keyboardReport2.bytes
-        )
-    }
-
-    fun sendModifierKeyUp(keyCode:Int){
-        when (keyCode) {
-            KeyEvent.KEYCODE_ALT_LEFT -> keyboardReport2.leftAlt = false
-            KeyEvent.KEYCODE_ALT_RIGHT -> keyboardReport2.rightAlt = false
-            KeyEvent.KEYCODE_CTRL_LEFT -> keyboardReport2.leftControl = false
-            KeyEvent.KEYCODE_CTRL_RIGHT -> keyboardReport2.rightControl = false
-            KeyEvent.KEYCODE_SHIFT_LEFT -> keyboardReport2.leftShift = false
-            KeyEvent.KEYCODE_SHIFT_RIGHT -> keyboardReport2.rightShift = false
-            KeyEvent.KEYCODE_WINDOW -> keyboardReport2.leftGui = false
-            KeyEvent.KEYCODE_CAPS_LOCK -> keyboardReport2.leftControl = false
-            else -> println("invalid modifier")
+//        if (key1 != null) {
+//            keyboardReport2.key1 = key1.toByte()
+//            bthid.sendReport(ConnectedDevice.device, KeyboardReport2.ID, keyboardReport2.bytes)
+//        }
+        if (key1 != null) {
+//            press alt space to send alt tab, because android consume alt tab first
+            if ((isAltPressed != 0) && (keyCode == KeyEvent.KEYCODE_SPACE)){
+                key1 = KeyboardReport2.KeyEventMap.get(KeyEvent.KEYCODE_TAB) ?: 0
+            }
+            keyboardReport2.key1 = key1.toByte()
+            bthid.sendReport(ConnectedDevice.device, KeyboardReport2.ID, keyboardReport2.bytes)
         }
-        keyboardReport2.key1=0.toByte()
-        bthid.sendReport(
-                ConnectedDevice.device,KeyboardReport2.ID,keyboardReport2.bytes
-        )
     }
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
         println("--- onKeyUp keycode is $keyCode")
-        if (listOf<Int>(KeyEvent.KEYCODE_CAPS_LOCK, KeyEvent.KEYCODE_ALT_LEFT, KeyEvent.KEYCODE_ALT_RIGHT,KeyEvent.KEYCODE_WINDOW,
-                        KeyEvent.KEYCODE_CTRL_LEFT,KeyEvent.KEYCODE_CTRL_RIGHT,KeyEvent.KEYCODE_SHIFT_LEFT,
-                        KeyEvent.KEYCODE_SHIFT_RIGHT).contains(keyCode)) {
-            sendModifierKeyUp(keyCode)
-            when (keyCode){
-                KeyEvent.KEYCODE_SHIFT_LEFT -> isShiftPressed = 0
-                KeyEvent.KEYCODE_SHIFT_RIGHT -> isShiftPressed = 0
-                KeyEvent.KEYCODE_ALT_LEFT -> {println("alt left is up"); isAltPressed=0;sendAllKeyUp()}
-                KeyEvent.KEYCODE_ALT_RIGHT -> {println("alt right is up"); isAltPressed=0;sendAllKeyUp()}
-//                KeyEvent.KEYCODE_ALT_LEFT -> sendAllKeyUp()
-//                KeyEvent.KEYCODE_ALT_RIGHT -> sendAllKeyUp()
-//                else -> sendAllKeyUp()
-            }
-        }
-        else{
-            when (keyCode){
-                KeyEvent.KEYCODE_TAB -> sendKeyUp(keyCode)
-                KeyEvent.KEYCODE_SPACE -> {if (isAltPressed == 0) sendKeyUp(keyCode) else sendKeyUp(KeyEvent.KEYCODE_TAB)}
-                else -> {
-                        sendAllKeyUp()
-                        when (isShiftPressed) {
-                            1 -> sendModifierKeyDown(KeyEvent.KEYCODE_SHIFT_LEFT)
-                            2 -> sendModifierKeyDown(KeyEvent.KEYCODE_SHIFT_RIGHT)
-                        }
-                }
-            }
-        }
+        sendKeyUp(keyCode)
         return true
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        if (bthid.connectedDevices != null){
+        if (bthid.connectedDevices != null) {
             println("--- onKeyDown keycode is $keyCode")
-            if (listOf<Int>(KeyEvent.KEYCODE_CAPS_LOCK, KeyEvent.KEYCODE_ALT_LEFT, KeyEvent.KEYCODE_ALT_RIGHT,KeyEvent.KEYCODE_WINDOW,
-                            KeyEvent.KEYCODE_CTRL_LEFT,KeyEvent.KEYCODE_CTRL_RIGHT,KeyEvent.KEYCODE_SHIFT_LEFT,
-                            KeyEvent.KEYCODE_SHIFT_RIGHT).contains(keyCode)) {
-                sendModifierKeyDown(keyCode)
-//                println(keyboardReport2.bytes[0])
-//                shift is 2, ctrl is 1, window is 8, and alt is 4
-                when (keyCode){
-                    KeyEvent.KEYCODE_SHIFT_LEFT -> isShiftPressed = 1
-                    KeyEvent.KEYCODE_SHIFT_RIGHT -> isShiftPressed = 2
-//                    for alt space to send alt tab
-                    KeyEvent.KEYCODE_ALT_LEFT -> {println("alt left is down"); isAltPressed =1}
-                    KeyEvent.KEYCODE_ALT_RIGHT -> {println("alt right is down"); isAltPressed =2 }
-                }
-            }
-            else{
-                if ((keyCode == KeyEvent.KEYCODE_SPACE) && (isAltPressed != 0)) {
-                    sendKeyDown(KeyEvent.KEYCODE_TAB)
-                }
-                else {
-                    sendKeyDown(keyCode)
-                    if (keyCode == KeyEvent.KEYCODE_DEL) sendKeyUp(keyCode)
-//                sendKeyUp(keyCode) this will delete anything when press y in Notes on iPadOS
-                }
-            }
+            sendKeyDown(keyCode)
         }
         return true
     }
