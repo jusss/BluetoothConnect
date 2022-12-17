@@ -22,7 +22,8 @@ class OTGRealKeyboardActivity : AppCompatActivity() {
     val keyboardReport2 = KeyboardReport2()
     lateinit var btAdapter: BluetoothAdapter
     lateinit var TARGET_DEVICE_NAME: String
-    var switchCapsLock = false
+    var capsLockToCtrl = false
+    var ctrlToCapsLock = false
     var isCapsLockPressed = false
     var isAltPressed = 0
     var isCtrlPressed = 0
@@ -121,8 +122,15 @@ class OTGRealKeyboardActivity : AppCompatActivity() {
             sendKeyUp(KeyEvent.KEYCODE_TAB)
         }
 
-        findViewById<Button>(R.id.switch_caps).setOnClickListener {
-            switchCapsLock = !switchCapsLock
+
+        findViewById<Button>(R.id.capslock_to_ctrl).focusable = 0
+        findViewById<Button>(R.id.capslock_to_ctrl).setOnClickListener {
+            capsLockToCtrl = !capsLockToCtrl
+        }
+
+        findViewById<Button>(R.id.ctrl_to_capslock).focusable = 0
+        findViewById<Button>(R.id.ctrl_to_capslock).setOnClickListener {
+            ctrlToCapsLock = !ctrlToCapsLock
         }
 
         findViewById<Button>(R.id.keyboard).setOnClickListener {
@@ -143,12 +151,12 @@ class OTGRealKeyboardActivity : AppCompatActivity() {
         when (keyCode) {
             KeyEvent.KEYCODE_ALT_LEFT -> {keyboardReport2.leftAlt = false; isAltPressed = 0}
             KeyEvent.KEYCODE_ALT_RIGHT -> {keyboardReport2.rightAlt = false; isAltPressed = 0}
-            KeyEvent.KEYCODE_CTRL_LEFT -> {keyboardReport2.leftControl = false; isCtrlPressed = 0}
+            KeyEvent.KEYCODE_CTRL_LEFT -> { if (ctrlToCapsLock) { key1 = KeyboardReport2.KeyEventMap.get(KeyEvent.KEYCODE_CAPS_LOCK); isCapsLockPressed = false } else { keyboardReport2.leftControl = false; isCtrlPressed = 0}}
             KeyEvent.KEYCODE_CTRL_RIGHT -> {keyboardReport2.rightControl = false; isCtrlPressed = 0}
             KeyEvent.KEYCODE_SHIFT_LEFT -> {keyboardReport2.leftShift = false; isShiftPressed = 0}
             KeyEvent.KEYCODE_SHIFT_RIGHT -> {keyboardReport2.rightShift = false; isShiftPressed = 0}
             KeyEvent.KEYCODE_WINDOW -> {keyboardReport2.leftGui = false; isWindowPressed = false}
-            KeyEvent.KEYCODE_CAPS_LOCK -> {if (switchCapsLock) {keyboardReport2.leftControl = false; isCtrlPressed = 0} else key1 = KeyboardReport2.KeyEventMap.get(keyCode)}
+            KeyEvent.KEYCODE_CAPS_LOCK -> {if (capsLockToCtrl) {keyboardReport2.leftControl = false; isCtrlPressed = 0} else key1 = KeyboardReport2.KeyEventMap.get(keyCode)}
             else -> key1 = KeyboardReport2.KeyEventMap.get(keyCode)
         }
 
@@ -189,6 +197,15 @@ class OTGRealKeyboardActivity : AppCompatActivity() {
             }
             if (isWindowPressed) keyboardReport2.leftGui = true
 
+//            if (ctrlToCapsLock && (isCtrlPressed == 1)){
+//                keyboardReport2.key1 = (KeyboardReport2.KeyEventMap.get(KeyEvent.KEYCODE_CAPS_LOCK) ?: 0).toByte()
+//                bthid.sendReport(ConnectedDevice.device, KeyboardReport2.ID, keyboardReport2.bytes)
+//            }
+            if (isCapsLockPressed){
+                keyboardReport2.key1 = (KeyboardReport2.KeyEventMap.get(KeyEvent.KEYCODE_CAPS_LOCK) ?: 0).toByte()
+                bthid.sendReport(ConnectedDevice.device, KeyboardReport2.ID, keyboardReport2.bytes)
+            }
+
             }
     }
 
@@ -197,12 +214,12 @@ class OTGRealKeyboardActivity : AppCompatActivity() {
         when (keyCode) {
             KeyEvent.KEYCODE_ALT_LEFT -> {keyboardReport2.leftAlt = true; isAltPressed = 1}
             KeyEvent.KEYCODE_ALT_RIGHT -> {keyboardReport2.rightAlt = true; isAltPressed = 2}
-            KeyEvent.KEYCODE_CTRL_LEFT -> {keyboardReport2.leftControl = true; isCtrlPressed = 1}
+            KeyEvent.KEYCODE_CTRL_LEFT -> { if (ctrlToCapsLock) { key1 = KeyboardReport2.KeyEventMap.get(KeyEvent.KEYCODE_CAPS_LOCK); isCapsLockPressed = true } else {keyboardReport2.leftControl = true; isCtrlPressed = 1}}
             KeyEvent.KEYCODE_CTRL_RIGHT -> {keyboardReport2.rightControl = true; isCtrlPressed = 2}
             KeyEvent.KEYCODE_SHIFT_LEFT -> {keyboardReport2.leftShift = true; isShiftPressed = 1}
             KeyEvent.KEYCODE_SHIFT_RIGHT -> {keyboardReport2.rightShift = true; isShiftPressed = 2}
             KeyEvent.KEYCODE_WINDOW -> {keyboardReport2.leftGui = true; isWindowPressed = true}
-            KeyEvent.KEYCODE_CAPS_LOCK -> { if (switchCapsLock) {keyboardReport2.leftControl = true; isCtrlPressed = 1} else key1 = KeyboardReport2.KeyEventMap.get(keyCode)}
+            KeyEvent.KEYCODE_CAPS_LOCK -> { if (capsLockToCtrl) {keyboardReport2.leftControl = true; isCtrlPressed = 1} else key1 = KeyboardReport2.KeyEventMap.get(keyCode)}
             else -> key1 = KeyboardReport2.KeyEventMap.get(keyCode)
         }
 //        if (key1 != null) {

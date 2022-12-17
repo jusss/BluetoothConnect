@@ -35,11 +35,22 @@
             android:textAllCaps="false"/>
 
         <Button
-            android:id="@+id/switch_caps"
+            android:id="@+id/capslock_to_ctrl"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="switch CapsLock"
-            android:layout_toLeftOf="@+id/tab"
+            android:text="CapsLock to Ctrl"
+            android:layout_below="@+id/window"
+            android:layout_alignParentRight="true"
+            android:focusable="false"
+            android:textAllCaps="false"/>
+
+        <Button
+            android:id="@+id/ctrl_to_capslock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ctrl to CapsLock"
+            android:layout_below="@+id/capslock_to_ctrl"
+            android:layout_alignParentRight="true"
             android:focusable="false"
             android:textAllCaps="false"/>
 
