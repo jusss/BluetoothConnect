@@ -2,9 +2,13 @@ package com.example.bluetoothconnect
 
 import android.bluetooth.*
 import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
+import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.LinearLayout
@@ -47,7 +51,7 @@ class OTGRealKeyboardActivity : AppCompatActivity() {
         btAdapter = BluetoothAdapter.getDefaultAdapter()
         val ll = findViewById<LinearLayout>(R.id.choose_target)
         val buttons = ArrayList<Button>()
-
+        var lastButton : Button? = null
 
         btAdapter.bondedDevices.map {btd ->
             buttons.add(Button(this))
@@ -56,6 +60,14 @@ class OTGRealKeyboardActivity : AppCompatActivity() {
             buttons.get(buttons.size - 1).setFocusable(false)
 
             buttons.get(buttons.size - 1).setOnClickListener {
+//                buttons.map { btn -> btn.setBackgroundColor(Color.LTGRAY) }
+//                buttons.map { btn -> btn.setTextColor(Color.BLACK) }
+                val btn = it as Button
+                btn.setTextColor(Color.parseColor("#006400"))
+
+                lastButton?.setTextColor(Color.BLACK)
+                lastButton = btn
+
 
                 bthid.connectedDevices.map {
                     println("--- connected device ${it.name} will be disconnected")
@@ -66,7 +78,9 @@ class OTGRealKeyboardActivity : AppCompatActivity() {
                     delay(600)
 //                    if (bthid.connectedDevices.isEmpty()){
                         println("--- connect to target ${btd.name}")
-                        bthid.connect(btd)
+                        val _s = bthid.connect(btd)
+//                        if (_s) it.setBackgroundColor(Color.parseColor("#A4C639"))
+//                        if (_s) btn.setTextColor(Color.GREEN)
 //                    }
                 }
 
@@ -122,15 +136,29 @@ class OTGRealKeyboardActivity : AppCompatActivity() {
             sendKeyUp(KeyEvent.KEYCODE_TAB)
         }
 
+//        val background = findViewById<Button>(R.id.capslock_to_ctrl).background as Drawable
+//        val colorDrawable = background as ColorDrawable
+//        val defaultButtonColor = colorDrawable.color
 
-        findViewById<Button>(R.id.capslock_to_ctrl).focusable = 0
+
+        findViewById<Button>(R.id.capslock_to_ctrl).focusable = View.NOT_FOCUSABLE
         findViewById<Button>(R.id.capslock_to_ctrl).setOnClickListener {
+            val btn = it as Button
             capsLockToCtrl = !capsLockToCtrl
+//            if (capsLockToCtrl) it.setBackgroundColor(Color.parseColor("#A4C639"))
+//            else it.setBackgroundColor(Color.LTGRAY)
+            if (capsLockToCtrl) btn.setTextColor(Color.parseColor("#006400"))
+            else btn.setTextColor(Color.BLACK)
         }
 
-        findViewById<Button>(R.id.ctrl_to_capslock).focusable = 0
+        findViewById<Button>(R.id.ctrl_to_capslock).focusable = View.NOT_FOCUSABLE
         findViewById<Button>(R.id.ctrl_to_capslock).setOnClickListener {
+            val btn = it as Button
             ctrlToCapsLock = !ctrlToCapsLock
+//            if (ctrlToCapsLock) it.setBackgroundColor(Color.parseColor("#A4C639"))
+//            else it.setBackgroundColor(Color.LTGRAY)
+            if (ctrlToCapsLock) btn.setTextColor(Color.parseColor("#006400"))
+            else btn.setTextColor(Color.BLACK)
         }
 
         findViewById<Button>(R.id.keyboard).setOnClickListener {
