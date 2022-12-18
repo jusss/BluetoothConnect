@@ -28,6 +28,7 @@ class OTGRealKeyboardActivity : AppCompatActivity() {
     lateinit var TARGET_DEVICE_NAME: String
     var capsLockToCtrl = false
     var ctrlToCapsLock = false
+    var keyRepeat = false
     var isCapsLockPressed = false
     var isAltPressed = 0
     var isCtrlPressed = 0
@@ -161,6 +162,16 @@ class OTGRealKeyboardActivity : AppCompatActivity() {
             else btn.setTextColor(Color.BLACK)
         }
 
+        findViewById<Button>(R.id.key_repeat).focusable = View.NOT_FOCUSABLE
+        findViewById<Button>(R.id.key_repeat).setOnClickListener {
+            val btn = it as Button
+            keyRepeat = !keyRepeat
+//            if (keyRepeat) it.setBackgroundColor(Color.parseColor("#A4C639"))
+//            else it.setBackgroundColor(Color.LTGRAY)
+            if (keyRepeat) btn.setTextColor(Color.parseColor("#006400"))
+            else btn.setTextColor(Color.BLACK)
+        }
+
         findViewById<Button>(R.id.keyboard).setOnClickListener {
             imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0)
         }
@@ -261,6 +272,24 @@ class OTGRealKeyboardActivity : AppCompatActivity() {
             }
             keyboardReport2.key1 = key1.toByte()
             bthid.sendReport(ConnectedDevice.device, KeyboardReport2.ID, keyboardReport2.bytes)
+
+           if (keyRepeat) {
+//               repeat letters in alphabet and numbers for iOS, since apple doesn't support key repeat
+               if ((28 < keyCode && keyCode < 55) || (6 < keyCode && keyCode < 17)) {
+//                    y will delete everything in Notes app on iPad, y is 28 in scan code, plus 128 is 156, and 156 is Keyboard Clear in scan code
+//                   there are Set 1, Set 2, Set 3, and USB HID scan code, in PS/2 Set 1, key 'a' make code is 1e, break code is 9e, release key will send break code
+//                   break code = make code + 0x80, using 'sudo showkeys --scancodes' in linux tty and press a can get a's make code and break code
+//                   the weird is using usb keyboard, press a and get 1e, which is Set 1, but a in USB HID scan code is 0x04
+//                   val _bytes = keyboardReport2.bytes
+//                   _bytes.fill(0)
+////                   _bytes[2] =(key1 + 0x80).toByte()
+//                   _bytes[2] =(key1 + 128).toByte()
+//                   bthid.sendReport(ConnectedDevice.device,KeyboardReport2.ID,_bytes)
+                   val _bytes = keyboardReport2.bytes
+                   _bytes.fill(0)
+                   bthid.sendReport(ConnectedDevice.device, KeyboardReport2.ID, _bytes)
+               }
+           }
         }
     }
 

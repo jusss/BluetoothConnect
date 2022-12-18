@@ -54,6 +54,16 @@
             android:focusable="false"
             android:textAllCaps="false"/>
 
+        <Button
+            android:id="@+id/key_repeat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Key Repeat for iOS"
+            android:layout_below="@+id/ctrl_to_capslock"
+            android:layout_alignParentRight="true"
+            android:focusable="false"
+            android:textAllCaps="false"/>
+
     </RelativeLayout>
 
     <LinearLayout
