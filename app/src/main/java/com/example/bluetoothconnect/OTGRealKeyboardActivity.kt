@@ -275,7 +275,7 @@ class OTGRealKeyboardActivity : AppCompatActivity() {
 
            if (keyRepeat) {
 //               repeat letters in alphabet and numbers for iOS, since apple doesn't support key repeat
-               if ((28 < keyCode && keyCode < 55) || (6 < keyCode && keyCode < 17)) {
+               if ((28 < keyCode && keyCode < 55) || (6 < keyCode && keyCode < 17) || (keyCode == KeyEvent.KEYCODE_DEL)) {
 //                    y will delete everything in Notes app on iPad, y is 28 in scan code, plus 128 is 156, and 156 is Keyboard Clear in scan code
 //                   there are Set 1, Set 2, Set 3, and USB HID scan code, in PS/2 Set 1, key 'a' make code is 1e, break code is 9e, release key will send break code
 //                   break code = make code + 0x80, using 'sudo showkeys --scancodes' in linux tty and press a can get a's make code and break code
