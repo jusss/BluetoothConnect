@@ -64,6 +64,26 @@
             android:focusable="false"
             android:textAllCaps="false"/>
 
+        <Button
+            android:id="@+id/wakelock_release"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="wakelock release"
+            android:layout_below="@+id/key_repeat"
+            android:layout_alignParentRight="true"
+            android:focusable="false"
+            android:textAllCaps="false"/>
+
+        <Button
+            android:id="@+id/low_bright"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="low bright"
+            android:layout_below="@+id/wakelock_release"
+            android:layout_alignParentRight="true"
+            android:focusable="false"
+            android:textAllCaps="false"/>
+
     </RelativeLayout>
 
     <LinearLayout

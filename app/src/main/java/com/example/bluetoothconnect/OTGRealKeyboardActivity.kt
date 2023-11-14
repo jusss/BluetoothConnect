@@ -6,9 +6,11 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.os.PowerManager
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
+import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.LinearLayout
@@ -53,6 +55,15 @@ class OTGRealKeyboardActivity : AppCompatActivity() {
         val ll = findViewById<LinearLayout>(R.id.choose_target)
         val buttons = ArrayList<Button>()
         var lastButton : Button? = null
+
+        val wakeLock: PowerManager.WakeLock =
+                (getSystemService(Context.POWER_SERVICE) as PowerManager).run {
+                    newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "OTGKeyboard::OTGRealKeyboardActivity").apply {
+                        acquire()
+                    }
+                }
+
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
         btAdapter.bondedDevices.map {btd ->
             buttons.add(Button(this))
@@ -141,6 +152,22 @@ class OTGRealKeyboardActivity : AppCompatActivity() {
 //        val colorDrawable = background as ColorDrawable
 //        val defaultButtonColor = colorDrawable.color
 
+        findViewById<Button>(R.id.wakelock_release).setOnClickListener {
+           wakeLock.release()
+        }
+
+        var low_light = true
+        findViewById<Button>(R.id.low_bright).setOnClickListener {
+            val lp: WindowManager.LayoutParams = window.attributes
+            if (low_light){
+                lp.screenBrightness = 0.0f
+            }
+            else {
+                lp.screenBrightness = 0.6f
+            }
+            low_light = !low_light
+            window.attributes = lp
+        }
 
         findViewById<Button>(R.id.capslock_to_ctrl).focusable = View.NOT_FOCUSABLE
         findViewById<Button>(R.id.capslock_to_ctrl).setOnClickListener {
