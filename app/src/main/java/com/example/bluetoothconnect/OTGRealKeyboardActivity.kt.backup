@@ -1,12 +1,11 @@
 package com.example.bluetoothconnect
 
 import android.bluetooth.*
-import android.content.*
+import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.os.IBinder
 import android.os.PowerManager
 import android.util.Log
 import android.view.KeyEvent
@@ -43,91 +42,19 @@ class OTGRealKeyboardActivity : AppCompatActivity() {
     var latestSentTime = System.currentTimeMillis()
     lateinit var imm: InputMethodManager
     var paused = false
-    val buttons = ArrayList<Button>()
-    var lastButton : Button? = null
-    lateinit var ll: LinearLayout
-
-    private lateinit var mService: BluetoothConnectService
-    private var mBound: Boolean = false
-
-    /** Defines callbacks for service binding, passed to bindService().  */
-    private val connection = object : ServiceConnection {
-
-        override fun onServiceConnected(className: ComponentName, service: IBinder) {
-            // We've bound to LocalService, cast the IBinder and get LocalService instance.
-            val binder = service as BluetoothConnectService.LocalBinder
-            mService = binder.getService()
-            mBound = true
-            println("*** onServiceConnected ")
-            mService.connect(TARGET_DEVICE_NAME)
-        }
-
-        override fun onServiceDisconnected(arg0: ComponentName) {
-            mBound = false
-        }
-    }
-
-    inner class ServiceConnectedReceiver: BroadcastReceiver(){
-        override fun onReceive(p0: Context?, p1: Intent?) {
-            if (p1?.action.equals("com.example.bluetoothconnect.service")){
-
-//                val result = p1?.getSerializableExtra("d") as IntentData
-
-                bthid = IntentData.bthid
-                btAdapter = IntentData.btAdapter
-
-                btAdapter.bondedDevices.map { btd ->
-                    buttons.add(Button(p0))
-                    buttons.get(buttons.size - 1).setText(btd.name)
-                    buttons.get(buttons.size - 1).setAllCaps(false)
-                    buttons.get(buttons.size - 1).setFocusable(false)
-
-                    buttons.get(buttons.size - 1).setOnClickListener {
-//                buttons.map { btn -> btn.setBackgroundColor(Color.LTGRAY) }
-//                buttons.map { btn -> btn.setTextColor(Color.BLACK) }
-                        val btn = it as Button
-                        btn.setTextColor(Color.parseColor("#006400"))
-
-                        lastButton?.setTextColor(Color.BLACK)
-                        lastButton = btn
-
-
-                        bthid.connectedDevices.map {
-                            println("--- connected device ${it.name} will be disconnected")
-                            bthid.disconnect(it)
-                        }
-
-                        CoroutineScope(Dispatchers.IO).launch {
-                            delay(600)
-//                    if (bthid.connectedDevices.isEmpty()){
-                            println("--- connect to target ${btd.name}")
-                            val _s = bthid.connect(btd)
-//                        if (_s) it.setBackgroundColor(Color.parseColor("#A4C639"))
-//                        if (_s) btn.setTextColor(Color.GREEN)
-//                    }
-                        }
-
-                        TARGET_DEVICE_NAME = btd.name
-                    }
-                    ll.addView(buttons.get(buttons.size - 1))
-                }
-            }
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_otgkeyboard)
 
-        val filter = IntentFilter("com.example.bluetoothconnect.service")
-        this.registerReceiver(ServiceConnectedReceiver(), filter)
-
         val intent = intent
         val name = intent.getSerializableExtra("name") as ArrayList<String>?
         TARGET_DEVICE_NAME = name!![0]
         val screenSize = name[1]
-//        btAdapter = BluetoothAdapter.getDefaultAdapter()
-        ll = findViewById<LinearLayout>(R.id.choose_target)
+        btAdapter = BluetoothAdapter.getDefaultAdapter()
+        val ll = findViewById<LinearLayout>(R.id.choose_target)
+        val buttons = ArrayList<Button>()
+        var lastButton : Button? = null
 
         val wakeLock: PowerManager.WakeLock =
                 (getSystemService(Context.POWER_SERVICE) as PowerManager).run {
@@ -137,6 +64,71 @@ class OTGRealKeyboardActivity : AppCompatActivity() {
                 }
 
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+
+        btAdapter.bondedDevices.map {btd ->
+            buttons.add(Button(this))
+            buttons.get(buttons.size - 1).setText(btd.name)
+            buttons.get(buttons.size - 1).setAllCaps(false)
+            buttons.get(buttons.size - 1).setFocusable(false)
+
+            buttons.get(buttons.size - 1).setOnClickListener {
+//                buttons.map { btn -> btn.setBackgroundColor(Color.LTGRAY) }
+//                buttons.map { btn -> btn.setTextColor(Color.BLACK) }
+                val btn = it as Button
+                btn.setTextColor(Color.parseColor("#006400"))
+
+                lastButton?.setTextColor(Color.BLACK)
+                lastButton = btn
+
+
+                bthid.connectedDevices.map {
+                    println("--- connected device ${it.name} will be disconnected")
+                    bthid.disconnect(it)
+                }
+
+                CoroutineScope(Dispatchers.IO).launch {
+                    delay(600)
+//                    if (bthid.connectedDevices.isEmpty()){
+                        println("--- connect to target ${btd.name}")
+                        val _s = bthid.connect(btd)
+//                        if (_s) it.setBackgroundColor(Color.parseColor("#A4C639"))
+//                        if (_s) btn.setTextColor(Color.GREEN)
+//                    }
+                }
+
+                TARGET_DEVICE_NAME = btd.name
+            }
+            ll.addView(buttons.get(buttons.size - 1))
+        }
+
+        // use BluetoothProfile.ServiceListener.onServiceConneted to get BluetoothHidDevice proxy object, no matter if bluetooth is connected or not
+        //BluetoothHidDevice.Callback can listen bluetooth connection state change, pass it to BluetoothHidDevice.registerApp
+        // after registerApp, once bluetooth connection is changed, callback will be called,
+        // get BluetoothHidDevice from BluetoothProfile.ServiceListener, get BluetoothDevice from registerApp
+        // send message need BluetoothHidDevice and BluetoothDevice with sendReport
+        // registerApp contain sdp_record, there's keyboard report id in sdp_record's last parameter descriptor
+
+        btAdapter.getProfileProxy(this,
+                object : BluetoothProfile.ServiceListener{
+                    override fun onServiceDisconnected(profile: Int) {
+                        println("--- Disconnect, profile is $profile")
+                    }
+                    override fun onServiceConnected(profile: Int, proxy: BluetoothProfile?) {
+                        println("--- connected, profile is $profile")
+                        if (profile != BluetoothProfile.HID_DEVICE) {
+                            return
+                        }
+                        // get bthid
+                        bthid = proxy as BluetoothHidDevice
+                        println("--- got hid proxy object ")
+                        val btcallback = BluetoothCallback(this@OTGRealKeyboardActivity,bthid, btAdapter,TARGET_DEVICE_NAME)
+                        bthid.registerApp(sdpRecord, null, qosOut, {it.run()}, btcallback)
+//                            bthid.registerApp(
+//                                    Constants.SDP_RECORD, null, Constants.QOS_OUT, Executor { obj: Runnable -> obj.run() }, btcallback
+//                            )
+                    }
+                }
+                , BluetoothProfile.HID_DEVICE)
 
         imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0)
@@ -211,7 +203,6 @@ class OTGRealKeyboardActivity : AppCompatActivity() {
             imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0)
         }
     }
-
 
 
     fun sendAllKeyUp(){
@@ -352,28 +343,48 @@ class OTGRealKeyboardActivity : AppCompatActivity() {
 
     override fun onResume() {
                 super.onResume()
+                if (paused) {
+                    btAdapter.getProfileProxy(this,
+                            object : BluetoothProfile.ServiceListener {
+                                override fun onServiceDisconnected(profile: Int) {
+                                    println("--- Disconnect, profile is $profile")
+                                }
+                                override fun onServiceConnected(profile: Int, proxy: BluetoothProfile?) {
+                                    println("--- connected, profile is $profile")
+                                    if (profile == BluetoothProfile.HID_DEVICE) {
+                                        // get bthid
+                                        bthid = proxy as BluetoothHidDevice
+                                        println("--- got hid proxy object ")
+                                        val btcallback = BluetoothCallback(this@OTGRealKeyboardActivity, bthid, btAdapter, TARGET_DEVICE_NAME)
+                                        bthid.registerApp(sdpRecord, null, qosOut, { it.run() }, btcallback)
+                                    }
+                                }
+                            }
+                            , BluetoothProfile.HID_DEVICE)
+                }
                 paused = false
     }
 
-    override fun onStart() {
-        super.onStart()
-        // Bind to LocalService.
-        Intent(this, BluetoothConnectService::class.java).also { intent ->
-            bindService(intent, connection, Context.BIND_AUTO_CREATE)
-        }
+
+    private val sdpRecord by lazy {
+        BluetoothHidDeviceAppSdpSettings(
+            "Bluetooth HID Keyboard",
+            "Bluetooth HID Keyboard",
+            "Fixed Point",
+            BluetoothHidDevice.SUBCLASS1_COMBO,
+//                DescriptorCollection.MOUSE_KEYBOARD_COMBO
+                        DescriptorCollection.KeyboardDescriptor
+        )
     }
 
-    override fun onStop() {
-        super.onStop()
+    private val qosOut by lazy {
+        BluetoothHidDeviceAppQosSettings(
+                BluetoothHidDeviceAppQosSettings.SERVICE_BEST_EFFORT,
+                800,
+                9,
+                0,
+                11250,
+                BluetoothHidDeviceAppQosSettings.MAX
+        )
     }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        unbindService(connection)
-        mBound = false
-    }
-
 }
-
-
-

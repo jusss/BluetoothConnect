@@ -59,6 +59,13 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     if (screenSize == "otg_real_keyboard"){
+
+
+//                        Intent intent1 = new Intent(getApplicationContext(), BluetoothConnectService.class);
+//                        intent1.putExtra("name","Geek for Geeks");
+//                        startForegroundService(intent1);
+
+
                         Intent intent = new Intent(getApplicationContext(), OTGRealKeyboardActivity.class);
                         intent.putExtra("name",name);
                         startActivity(intent);
