@@ -78,3 +78,9 @@ send 0x0 will send all key up
 -- 4. archlinux blueman-manager right click on android device name, choose 'connect'<br/>
 -- 5. pair each other<br/>
 -- 6. it works<br/>
+
+# Latency on iOS/iPadOS
+
+it may have some latency on iOS/iPadOS, search "predict" in Settings,
+disable "Predictive" in General -> Keyboard and all the smart things
+disable "Extended Predictions" in Accessibility -> Switch Control
