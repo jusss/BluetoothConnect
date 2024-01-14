@@ -81,6 +81,6 @@ send 0x0 will send all key up
 
 # Latency on iOS/iPadOS
 
-it may have some latency on iOS/iPadOS, search "predict" in Settings,
-disable "Predictive" in General -> Keyboard and all the smart things
-disable "Extended Predictions" in Accessibility -> Switch Control
+it may have some latency on iOS/iPadOS, search "predict" in Settings,<br/>
+disable "Predictive" in General -> Keyboard and all the smart things,<br/>
+disable "Extended Predictions" in Accessibility -> Switch Control<br/>
