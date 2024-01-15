@@ -84,3 +84,13 @@ send 0x0 will send all key up
 it may have some latency on iOS/iPadOS, search "predict" in Settings,<br/>
 disable "Predictive" in General -> Keyboard and all the smart things,<br/>
 disable "Extended Predictions" in Accessibility -> Switch Control<br/>
+be connected from other devices, not connect to other devices<br/>
+
+# Weird Connection
+the device connect to other devices, it can connect directly<br/>
+but other devices connect to this device with hid profile,<br/>
+only the last successed one can connect it directly,<br/>
+otherwise you need to forget the last successed device on this device,<br/>
+then use other device connect this device
+
+
